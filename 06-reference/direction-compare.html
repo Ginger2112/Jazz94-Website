@@ -1,0 +1,961 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>html,body{margin:0}</style>
+</head>
+<body>
+<title>Jazz94 Direction Compare</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;1,800;1,900&family=Barlow:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a slim control bar (level, page, device) over a stage that holds the live site, either full width (desktop) or in a 390 px phone frame (mobile). The chrome is neutral and theme-aware; the site inside keeps the fixed Jazz94 brand palette. */
+:root {
+  --c-bg: #EFEDF0; --c-bar: #FFFFFF; --c-fg: #1C1A22; --c-mu: #5E5A68; --c-ln: #DDDAE2;
+  --c-on: #1C0B12; --c-on-fg: #FFFBFA; --c-frame: #1C1A22;
+  --bx: #9E1F45; --ch: #E9D3A6; --chl: #F6EDDC; --ro: #FF7A9C; --ink: #1C0B12; --pa: #FFFBFA;
+  --mu: #6B5560; --tx2: #4A3A41; --ln: rgba(28,11,18,.12); --tile: #F3E9E2; --ok: #0E6B44;
+  --serif: "DM Serif Display", Georgia, serif; --sans: "DM Sans", system-ui, sans-serif; --mono: "JetBrains Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --c-bg: #121117; --c-bar: #1C1B23; --c-fg: #F1F0F6; --c-mu: #A4A1B3; --c-ln: #2F2D3A; --c-on: #E9D3A6; --c-on-fg: #1C0B12; --c-frame: #000000; color-scheme: dark; } }
+:root[data-theme="dark"] { --c-bg: #121117; --c-bar: #1C1B23; --c-fg: #F1F0F6; --c-mu: #A4A1B3; --c-ln: #2F2D3A; --c-on: #E9D3A6; --c-on-fg: #1C0B12; --c-frame: #000000; color-scheme: dark; }
+html, body { height: 100%; }
+body { background: var(--c-bg); color: var(--c-fg); font-family: var(--sans); display: flex; flex-direction: column; overflow: hidden; }
+* { box-sizing: border-box; }
+
+/* control bar */
+.bar { background: var(--c-bar); border-bottom: 1px solid var(--c-ln); padding-block: 10px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; }
+.bar h1 { margin: 0 auto 0 0; font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+.bar h1 svg { height: 28px; width: auto; }
+.seg { display: inline-flex; background: var(--c-bg); border-radius: 12px; padding: 3px; gap: 2px; flex-wrap: wrap; }
+.seg button { font: inherit; font-size: 13px; font-weight: 500; border: 0; background: transparent; color: var(--c-mu); padding: 7px 12px; border-radius: 9px; cursor: pointer; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--c-on); color: var(--c-on-fg); }
+.seg button:focus-visible, .site :focus-visible { outline: 3px solid #4F7BFF; outline-offset: 2px; }
+.grp { display: flex; align-items: center; gap: 8px; }
+.grp > span { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--c-mu); }
+
+/* stage */
+.stage { flex: 1; min-height: 0; display: flex; justify-content: center; align-items: stretch; padding: 14px max(14px, env(safe-area-inset-left, 0px)) 14px max(14px, env(safe-area-inset-right, 0px)); }
+.dev { position: relative; width: 100%; height: 100%; border-radius: 14px; overflow: hidden; background: var(--pa); box-shadow: 0 0 0 1px var(--c-ln), 0 30px 60px -40px rgba(0,0,0,.4); }
+.dev.mobile { width: 390px; max-width: 100%; height: min(844px, 100%); border-radius: 44px; box-shadow: 0 0 0 10px var(--c-frame), 0 40px 80px -30px rgba(0,0,0,.5); margin-top: 6px; }
+.scroller { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; container: site / inline-size; scroll-behavior: smooth; }
+.layer { position: absolute; inset: 0; pointer-events: none; z-index: 40; }
+.layer > * { pointer-events: auto; }
+
+/* ===== Jazz94 site ===== */
+.site { background: var(--pa); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.55; min-height: 100%; }
+.site a { color: inherit; }
+.site button { font: inherit; color: inherit; }
+.w { max-width: 1320px; margin: 0 auto; padding-left: 20px; padding-right: 20px; }
+.serif { font-family: var(--serif); font-weight: 400; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.kick { font-size: 13px; font-weight: 500; letter-spacing: .24em; text-transform: uppercase; color: var(--bx); }
+.h2 { margin: 0; font-family: var(--serif); font-weight: 400; font-size: clamp(34px, 4cqi, 56px); line-height: 1; text-wrap: balance; }
+.h2 em, .hero h2 em { color: var(--bx); }
+.sec { padding-bottom: 96px; }
+.row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 16px; margin-bottom: 28px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; border-radius: 999px; padding: 15px 28px; font-weight: 700; font-size: 15px; text-decoration: none; border: 1.5px solid transparent; cursor: pointer; position: relative; overflow: hidden; }
+.btn-p { background: var(--bx); color: var(--pa) !important; }
+.btn-d { background: var(--ink); color: var(--pa) !important; }
+.btn-c { background: var(--ch); color: var(--ink) !important; }
+.btn-o { border-color: var(--ink); background: transparent; color: var(--ink) !important; }
+.btn-sm { padding: 8px 14px; font-size: 13px; }
+.chip { border: 1.5px solid var(--ink); background: transparent; padding: 9px 18px; border-radius: 999px; font-size: 14px; font-weight: 500; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--pa); }
+.ph { position: relative; overflow: hidden; background: var(--tile); }
+.ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(28,11,18,0) 40%, rgba(28,11,18,.75) 100%); }
+.g4 { display: grid; grid-template-columns: repeat(auto-fill, minmax(max(150px, calc((100% - 72px) / 4)), 1fr)); gap: 36px 24px; }
+.g3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(max(240px, calc((100% - 48px) / 3)), 1fr)); gap: 24px; }
+.g3p { display: grid; grid-template-columns: repeat(auto-fill, minmax(max(150px, calc((100% - 48px) / 3)), 1fr)); gap: 36px 24px; }
+.ib { display: grid; place-items: center; background: none; border: 0; padding: 8px; cursor: pointer; text-decoration: none; position: relative; }
+.ib svg { width: 22px; height: 22px; }
+
+/* ticker + header */
+.ticker { background: var(--ink); color: var(--ch); overflow: hidden; white-space: nowrap; font-size: 12px; font-weight: 500; letter-spacing: .16em; padding: 9px 0; }
+.marq { display: inline-flex; gap: 36px; padding-left: 36px; }
+.marq span.s { color: var(--ro); }
+.hdr { position: sticky; top: 0; z-index: 20; background: rgba(255,251,250,.94); backdrop-filter: blur(12px); border-bottom: 1px solid var(--ln); }
+.hdr-top { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; padding-top: 12px; padding-bottom: 8px; }
+.hdr-l { display: flex; align-items: center; gap: 4px; justify-self: start; }
+.hdr-r { display: flex; align-items: center; gap: 2px; justify-self: end; }
+.hdr-search { display: flex; gap: 8px; font-size: 14px; letter-spacing: .08em; }
+.hamb { display: none; }
+.logo-l { display: block; line-height: 0; }
+.logo-l svg { width: 186px; height: auto; }
+.bagn { position: absolute; top: 2px; right: 0; min-width: 18px; height: 18px; border-radius: 9px; background: var(--bx); color: var(--pa); font-size: 11px; font-weight: 700; line-height: 18px; text-align: center; padding: 0 4px; }
+.navrow { display: flex; justify-content: safe center; gap: 32px; overflow-x: auto; white-space: nowrap; font-size: 13px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; padding-bottom: 12px; }
+.navrow a { text-decoration: none; padding-bottom: 3px; }
+.navrow a.sale { color: var(--bx); }
+.navrow a[aria-current="page"] { text-decoration: underline; text-underline-offset: 6px; }
+
+/* hero */
+.hero { display: flex; flex-wrap: wrap; gap: 48px; align-items: center; padding-top: 40px; padding-bottom: 88px; }
+.hero-t { flex: 1 1 440px; min-width: 0; display: flex; flex-direction: column; gap: 22px; }
+.hero h2 { margin: 0; font-family: var(--serif); font-weight: 400; font-size: clamp(56px, 8.6cqi, 132px); line-height: .92; letter-spacing: -.015em; }
+.hero p { margin: 0; font-size: 18px; max-width: 42ch; color: var(--tx2); }
+.trust { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 13px; color: var(--mu); }
+.hero-v { flex: 1 1 440px; min-width: 0; position: relative; display: flex; justify-content: center; }
+.hero-blob { position: absolute; width: 78%; aspect-ratio: 1; border-radius: 50%; background: var(--ch); top: 6%; right: -4%; }
+.hero-img { position: relative; width: 100%; max-width: 520px; aspect-ratio: 4 / 5; border-radius: 999px 999px 32px 32px; }
+.hero-img img { object-position: 50% 30%; }
+.badge-spin { position: absolute; top: 2%; left: 2%; width: 124px; height: 124px; }
+.chipcard { position: absolute; left: 0; bottom: 8%; background: var(--pa); border-radius: 20px; padding: 10px 16px 10px 10px; display: flex; align-items: center; gap: 12px; text-decoration: none; box-shadow: 0 20px 40px -20px rgba(28,11,18,.45); }
+.chipcard .ph { width: 56px; height: 56px; border-radius: 14px; }
+
+/* category tiles */
+.tile { position: relative; display: block; aspect-ratio: 4 / 5; border-radius: 28px; text-decoration: none; }
+.tile .cap { position: absolute; left: 24px; right: 24px; bottom: 22px; display: flex; justify-content: space-between; align-items: end; gap: 12px; color: var(--pa); }
+.tile .cap small { display: block; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--ch); }
+.tile .cap b { font-family: var(--serif); font-weight: 400; font-size: 36px; line-height: 1; }
+.arrow { width: 46px; height: 46px; border-radius: 50%; background: var(--pa); color: var(--ink); display: grid; place-items: center; flex: none; }
+
+/* product card */
+.card { position: relative; display: flex; flex-direction: column; gap: 12px; }
+.card .ph { display: block; aspect-ratio: 4 / 5; border-radius: 22px; }
+.tag { position: absolute; top: 12px; left: 12px; background: var(--pa); color: var(--ink); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 5px 10px; border-radius: 999px; z-index: 2; }
+.heart { position: absolute; top: 10px; right: 10px; width: 40px; height: 40px; border-radius: 50%; border: 0; background: var(--pa); color: var(--bx); display: grid; place-items: center; cursor: pointer; z-index: 2; }
+.heart svg { width: 18px; height: 18px; }
+.meta { display: flex; flex-direction: column; gap: 4px; padding: 0 4px 4px; }
+.cat-l { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--mu); }
+.pname { font-family: var(--serif); font-size: 20px; line-height: 1.2; text-decoration: none; }
+.dots { display: flex; gap: 6px; }
+.dots i { width: 12px; height: 12px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(28,11,18,.2); }
+.pr { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding-top: 4px; }
+
+/* editorial + banner */
+.edit { display: flex; flex-wrap: wrap; background: var(--chl); border-radius: 36px; overflow: hidden; }
+.edit > .ph { flex: 1 1 420px; min-height: 540px; }
+.edit > .ph img { position: absolute; inset: 0; object-position: 50% 25%; }
+.edit-t { flex: 1 1 420px; min-width: 0; padding: 56px 48px; display: flex; flex-direction: column; gap: 20px; justify-content: center; }
+.look { display: flex; align-items: center; gap: 14px; background: var(--pa); border-radius: 16px; padding: 8px 16px 8px 8px; text-decoration: none; }
+.look .ph { width: 56px; height: 56px; border-radius: 12px; flex: none; }
+.banner { display: flex; flex-wrap: wrap; align-items: center; gap: 40px; background: var(--ink); color: var(--pa); border-radius: 36px; padding: 56px; }
+.banner .ph { flex: 1 1 380px; height: 420px; border-radius: 26px; }
+.svc { display: grid; grid-template-columns: repeat(auto-fill, minmax(max(150px, calc((100% - 48px) / 4)), 1fr)); gap: 20px; border-top: 1px solid var(--ln); padding-top: 40px; }
+.svc div { display: flex; flex-direction: column; gap: 6px; }
+.svc .ico { width: 46px; height: 46px; border-radius: 14px; background: var(--chl); color: var(--bx); display: grid; place-items: center; }
+.club { background: var(--bx); color: var(--pa); }
+.club .w { display: flex; flex-wrap: wrap; gap: 28px; align-items: center; justify-content: space-between; padding-top: 64px; padding-bottom: 64px; }
+.club input { flex: 1 1 220px; min-width: 0; padding: 16px 20px; border: 1.5px solid rgba(255,251,250,.55); border-radius: 999px; background: transparent; color: var(--pa); font: inherit; }
+.club input::placeholder { color: #F1D9E0; }
+.ftr { background: var(--ink); color: #E8DCDF; }
+.ftr-cols { display: grid; grid-template-columns: repeat(auto-fill, minmax(max(150px, calc((100% - 128px) / 5)), 1fr)); gap: 32px; padding-top: 64px; padding-bottom: 32px; }
+.ftr h4 { margin: 0 0 6px; color: var(--ch); font-size: 12px; letter-spacing: .2em; text-transform: uppercase; }
+.ftr a { color: #E8DCDF; text-decoration: none; font-size: 14px; display: block; padding: 3px 0; }
+.ftr-b { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: 13px; color: #B8A6AD; border-top: 1px solid rgba(255,251,250,.12); padding-top: 20px; padding-bottom: 32px; }
+
+/* category page */
+.crumb { font-size: 13px; color: var(--mu); padding-top: 20px; }
+.crumb a { color: var(--mu); }
+.cbanner { position: relative; min-height: 300px; border-radius: 32px; display: flex; align-items: flex-end; margin-top: 16px; }
+.cbanner img { position: absolute; inset: 0; object-position: 50% 60%; }
+.cbanner .shade { background: linear-gradient(90deg, rgba(28,11,18,.8) 0%, rgba(28,11,18,.2) 60%, rgba(28,11,18,0) 100%); }
+.cbanner .t { position: relative; padding: 40px 44px; color: var(--pa); display: flex; flex-direction: column; gap: 8px; max-width: 560px; }
+.ctools { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between; padding-top: 24px; }
+.ctools select { font: inherit; font-size: 14px; padding: 9px 14px; border-radius: 12px; border: 1.5px solid rgba(28,11,18,.25); background: var(--pa); color: var(--ink); }
+.mfilt { display: none; }
+.cmain { display: flex; flex-wrap: wrap; gap: 40px; align-items: flex-start; padding-top: 28px; padding-bottom: 40px; }
+.aside { flex: 1 1 230px; max-width: 100%; display: flex; flex-direction: column; gap: 22px; font-size: 14px; }
+.aside fieldset { border: 0; border-top: 1px solid var(--ln); margin: 0; padding: 16px 0 0; display: flex; flex-direction: column; gap: 10px; }
+.aside legend { font-size: 12px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; padding: 0 0 10px; float: left; width: 100%; }
+.aside label { display: flex; gap: 10px; align-items: center; cursor: pointer; }
+.aside input { width: 18px; height: 18px; accent-color: var(--bx); }
+.sw { width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid rgba(28,11,18,.2); cursor: pointer; }
+.sizes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.sizes button { border: 1.5px solid rgba(28,11,18,.2); background: var(--pa); border-radius: 10px; padding: 8px 0; font-size: 13px; cursor: pointer; }
+.cgrid { flex: 999 1 560px; min-width: 0; }
+.promo { position: relative; display: flex; align-items: flex-end; aspect-ratio: 4 / 5; border-radius: 22px; text-decoration: none; }
+.promo img { position: absolute; inset: 0; }
+.promo .t { position: relative; padding: 24px; color: var(--pa); display: flex; flex-direction: column; gap: 6px; }
+.promo .t b { font-family: var(--serif); font-weight: 400; font-size: 28px; line-height: 1.05; }
+.promo .t small { font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--ch); }
+
+/* product page */
+.pdp { display: flex; flex-wrap: wrap; gap: 56px; align-items: flex-start; padding-top: 20px; padding-bottom: 80px; }
+.gal { flex: 1.15 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+.gal .main { aspect-ratio: 1; border-radius: 32px; }
+.thumbs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.thumbs button { padding: 0; aspect-ratio: 1; border-radius: 18px; overflow: hidden; border: 2px solid transparent; background: var(--tile); cursor: pointer; }
+.thumbs button[aria-pressed="true"] { border-color: var(--bx); }
+.thumbs img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.info { flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 22px; }
+.info h1 { margin: 0; font-family: var(--serif); font-weight: 400; font-size: clamp(40px, 4.4cqi, 60px); line-height: 1; }
+.vars { display: flex; flex-direction: column; gap: 10px; border-top: 1px solid var(--ln); padding-top: 20px; }
+.swatch { width: 40px; height: 40px; border-radius: 50%; border: 3px solid var(--pa); box-shadow: 0 0 0 2px rgba(28,11,18,.2); cursor: pointer; }
+.swatch[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--bx); }
+.buyrow { display: flex; gap: 10px; flex-wrap: wrap; align-items: stretch; }
+.qty { display: flex; align-items: center; border: 1.5px solid rgba(28,11,18,.25); border-radius: 999px; }
+.qty button { width: 44px; height: 50px; border: 0; background: none; font-size: 20px; cursor: pointer; }
+.qty span { min-width: 22px; text-align: center; font-family: var(--mono); }
+.pin { background: var(--chl); border-radius: 20px; padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+.pin input, .field input, .cpn input { padding: 12px 14px; border: 1.5px solid rgba(28,11,18,.2); border-radius: 12px; font: inherit; font-size: 15px; background: #FFFFFF; color: var(--ink); min-width: 0; }
+.acc button { width: 100%; display: flex; justify-content: space-between; align-items: center; background: none; border: 0; border-top: 1px solid var(--ln); padding: 16px 0; font-weight: 700; cursor: pointer; text-align: left; }
+.acc button span:last-child { font-size: 20px; transition: transform .3s; }
+.acc button[aria-expanded="true"] span:last-child { transform: rotate(45deg); }
+.acc p { margin: 0 0 16px; color: var(--tx2); font-size: 15px; }
+.revs { border: 1px solid var(--ln); border-radius: 28px; padding: 36px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between; }
+
+/* cart */
+.cartm { display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start; padding-bottom: 80px; }
+.lines { flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+.ship { background: var(--chl); border-radius: 20px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; }
+.track { height: 6px; border-radius: 6px; background: rgba(28,11,18,.1); overflow: hidden; }
+.track i { display: block; height: 100%; background: var(--bx); border-radius: 6px; }
+.line { display: flex; gap: 20px; flex-wrap: wrap; padding-bottom: 20px; border-bottom: 1px solid var(--ln); }
+.line .ph { width: 120px; height: 146px; border-radius: 18px; flex: none; }
+.line .d { flex: 1 1 200px; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.link { background: none; border: 0; padding: 0; font-size: 14px; text-decoration: underline; cursor: pointer; }
+.sum { flex: 1 1 330px; min-width: 0; position: sticky; top: 130px; background: #FFFFFF; border: 1px solid rgba(28,11,18,.14); border-radius: 28px; padding: 28px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 30px 60px -40px rgba(28,11,18,.35); }
+.sum .r { display: flex; justify-content: space-between; font-size: 15px; gap: 12px; }
+.cpn { display: flex; gap: 8px; }
+.cpn input { flex: 1; text-transform: uppercase; }
+.empty { border: 1px dashed rgba(28,11,18,.25); border-radius: 24px; padding: 48px 24px; text-align: center; display: flex; flex-direction: column; gap: 14px; align-items: center; }
+
+/* checkout */
+.cohdr { border-bottom: 1px solid var(--ln); }
+.cohdr .w { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-top: 14px; padding-bottom: 14px; max-width: 1180px; }
+.steps { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 14px; padding-top: 28px; }
+.steps span { border: 1.5px solid rgba(28,11,18,.3); padding: 6px 14px; border-radius: 999px; color: var(--mu); }
+.steps span.on { background: var(--ink); border-color: var(--ink); color: var(--pa); }
+.steps i { width: 28px; height: 1.5px; background: rgba(28,11,18,.25); }
+.co { display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start; padding-top: 28px; padding-bottom: 72px; }
+.co form { flex: 999 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 36px; }
+.co fieldset { border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.co legend { padding: 0 0 14px; font-family: var(--serif); font-size: 30px; }
+.fields { display: grid; grid-template-columns: repeat(auto-fill, minmax(max(200px, calc((100% - 14px) / 2)), 1fr)); gap: 14px; }
+.field { display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 500; color: var(--tx2); }
+.opt { border: 2px solid rgba(28,11,18,.15); background: #FFFFFF; border-radius: 16px; transition: border-color .25s, background .25s; }
+.opt[data-on="1"] { border-color: var(--bx); background: #FFF3F5; }
+.opt > button { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 12px; text-align: left; border: 0; background: none; padding: 16px 18px; cursor: pointer; }
+.radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--ink); display: grid; place-items: center; flex: none; }
+.radio i { width: 10px; height: 10px; border-radius: 50%; }
+.opt[data-on="1"] .radio i { background: var(--bx); }
+.osum { flex: 1 1 310px; min-width: 0; position: sticky; top: 20px; background: var(--chl); border-radius: 28px; padding: 26px; display: flex; flex-direction: column; gap: 16px; }
+.done { max-width: 720px; margin: 0 auto; padding: 72px 20px 96px; display: flex; flex-direction: column; align-items: center; gap: 18px; text-align: center; }
+
+/* overlay: drawer + toast */
+.scrim { position: absolute; inset: 0; background: rgba(28,11,18,.45); }
+.drawer { position: absolute; top: 0; bottom: 0; left: 0; width: min(340px, 86%); background: var(--pa); color: var(--ink); font-family: var(--sans); display: flex; flex-direction: column; box-shadow: 30px 0 60px -30px rgba(28,11,18,.5); overflow-y: auto; }
+.drawer .top { display: flex; justify-content: space-between; align-items: center; padding: 18px 16px 14px 20px; border-bottom: 1px solid var(--ln); }
+.drawer .top svg.lg { width: 150px; height: auto; }
+.drawer nav { display: flex; flex-direction: column; padding: 8px 20px; }
+.drawer nav a { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--ln); font-family: var(--serif); font-size: 26px; text-decoration: none; color: var(--ink); }
+.drawer nav a small { font-family: var(--sans); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--mu); }
+.drawer .util { display: flex; flex-direction: column; gap: 4px; padding: 14px 20px; }
+.drawer .util a { display: flex; gap: 12px; align-items: center; padding: 10px 0; font-size: 15px; text-decoration: none; color: var(--ink); }
+.drawer .util svg { width: 20px; height: 20px; }
+.drawer .promo-d { margin: auto 20px 24px; background: var(--ink); color: var(--pa); border-radius: 20px; padding: 18px; display: flex; flex-direction: column; gap: 8px; }
+.toast { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--ink); color: var(--pa); border-radius: 999px; padding: 10px 10px 10px 20px; display: flex; align-items: center; gap: 14px; box-shadow: 0 24px 48px -20px rgba(28,11,18,.6); white-space: nowrap; font-size: 14px; font-family: var(--sans); max-width: calc(100% - 24px); }
+.toast span { overflow: hidden; text-overflow: ellipsis; }
+.toast a { background: var(--ch); color: var(--ink); border-radius: 999px; padding: 8px 14px; text-decoration: none; font-weight: 700; flex: none; }
+
+/* ===== Mobile layout (container width) ===== */
+@container site (max-width: 760px) {
+  .hamb { display: grid; }
+  .hdr-search .lbl, .hide-m, .navrow { display: none; }
+  .hdr-top { padding-top: 8px; padding-bottom: 8px; }
+  .logo-l svg { width: 150px; }
+  .sec { padding-bottom: 64px; }
+  .hero { padding-top: 24px; padding-bottom: 56px; gap: 32px; }
+  .hero p { font-size: 16px; }
+  .badge-spin { width: 92px; height: 92px; }
+  .edit > .ph { min-height: 360px; }
+  .edit-t { padding: 32px 24px; }
+  .banner { padding: 32px 24px; gap: 24px; border-radius: 28px; }
+  .banner .ph { height: 260px; }
+  .cbanner { min-height: 240px; }
+  .cbanner .t { padding: 28px 24px; }
+  .aside { display: none; }
+  .aside.open { display: flex; }
+  .mfilt { display: inline-flex; }
+  .pdp { gap: 28px; }
+  .buyrow { position: sticky; bottom: 0; z-index: 5; background: var(--pa); margin: 0 -20px; padding: 12px 20px; box-shadow: 0 -12px 24px -18px rgba(28,11,18,.4); }
+  .revs { padding: 24px; }
+  .line .ph { width: 96px; height: 118px; }
+  .sum { position: static; padding: 22px; }
+  .osum { position: static; order: -1; }
+  .ftr-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ftr-cols > div:first-child { grid-column: 1 / -1; }
+}
+
+/* ===== L1 wireframe skin ===== */
+.lv1 { filter: grayscale(1); }
+.lv1, .lv1 * { font-family: system-ui, -apple-system, "Segoe UI", sans-serif !important; }
+.lv1 .serif, .lv1 .h2, .lv1 .hero h2, .lv1 .pname, .lv1 .info h1 { font-weight: 700; letter-spacing: 0; }
+.lv1 .ph img, .lv1 .promo img, .lv1 .cbanner img { visibility: hidden; }
+.lv1 .ph, .lv1 .promo, .lv1 .cbanner { background: linear-gradient(to top right, transparent calc(50% - 1px), #C8C8C8 50%, transparent calc(50% + 1px)), linear-gradient(to top left, transparent calc(50% - 1px), #C8C8C8 50%, transparent calc(50% + 1px)), #E9E9E9 !important; box-shadow: inset 0 0 0 1.5px #C8C8C8; }
+.lv1 .shade, .lv1 .hero-blob { display: none; }
+.lv1 .on-img, .lv1 .tile .cap, .lv1 .promo .t, .lv1 .cbanner .t { color: #222 !important; }
+.lv1 .tile .cap small, .lv1 .promo .t small, .lv1 .cbanner .kick { color: #555 !important; }
+.lv1 [data-n] { position: relative; outline: 1.5px dashed #9A9A9A; outline-offset: -3px; }
+.lv1 [data-n]::before { content: attr(data-n); position: absolute; top: 6px; left: 6px; z-index: 30; min-width: 26px; height: 26px; padding: 0 6px; border-radius: 13px; background: #111; color: #fff; font: 700 12px/26px system-ui !important; text-align: center; letter-spacing: 0; text-transform: none; }
+.notes { padding: 40px 20px 56px; max-width: 1320px; margin: 0 auto; }
+.notes ol { margin: 10px 0 0; padding-left: 26px; display: grid; gap: 6px; color: #444; font-size: 14px; max-width: 80ch; }
+
+/* ===== L3 motion ===== */
+@keyframes fu { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+@keyframes kb { from { transform: scale(1.14); } to { transform: scale(1); } }
+@keyframes mq { to { transform: translateX(-50%); } }
+@keyframes fl { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+@keyframes sp { to { transform: rotate(360deg); } }
+@keyframes pop { 0% { transform: scale(1); } 40% { transform: scale(1.4); } 100% { transform: scale(1); } }
+@keyframes pop2 { 0% { transform: scale(1); } 40% { transform: scale(1.4); } 100% { transform: scale(1); } }
+@keyframes tst { from { opacity: 0; transform: translate(-50%, 24px); } to { opacity: 1; transform: translate(-50%, 0); } }
+@keyframes fd { from { opacity: 0; transform: scale(1.03); } to { opacity: 1; transform: none; } }
+@keyframes dr { from { transform: translateX(-100%); } to { transform: none; } }
+@keyframes sc { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ck { from { stroke-dashoffset: 60; } to { stroke-dashoffset: 0; } }
+@keyframes br { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.lv3.enter .fu { animation: fu .9s cubic-bezier(.2,.7,.2,1) backwards; }
+.lv3.enter .d1 { animation-delay: .12s; } .lv3.enter .d2 { animation-delay: .24s; } .lv3.enter .d3 { animation-delay: .36s; } .lv3.enter .d4 { animation-delay: .48s; }
+.lv3.enter .kb { animation: kb 1.8s cubic-bezier(.2,.7,.2,1) backwards; }
+.lv3 .marq { animation: mq 32s linear infinite; }
+.lv3 .chipcard { animation: fl 4.5s ease-in-out infinite; }
+.lv3 .badge-spin { animation: sp 18s linear infinite; }
+.lv3 .zoom img { transition: transform .8s cubic-bezier(.2,.7,.2,1); }
+.lv3 .zoom:hover img { transform: scale(1.07); }
+.lv3 .lift { transition: transform .35s cubic-bezier(.2,.7,.2,1); }
+.lv3 .lift:hover { transform: translateY(-6px); }
+.lv3 .btn { transition: transform .25s, box-shadow .25s; }
+.lv3 .btn:hover { transform: translateY(-2px); box-shadow: 0 14px 28px -14px rgba(158,31,69,.6); }
+.lv3 .btn::after { content: ""; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 35%, rgba(255,255,255,.38) 50%, transparent 65%); transform: translateX(-130%); transition: transform .9s; pointer-events: none; }
+.lv3 .btn:hover::after { transform: translateX(130%); }
+.lv3 .navrow a { background-image: linear-gradient(currentColor, currentColor); background-position: 0 100%; background-size: 0 1.5px; background-repeat: no-repeat; transition: background-size .35s; }
+.lv3 .navrow a:hover { background-size: 100% 1.5px; }
+.lv3 .chip { transition: background .25s, color .25s; }
+.lv3 .pa { animation: pop .45s; } .lv3 .pb { animation: pop2 .45s; }
+.lv3 .swap { animation: fd .5s backwards; } .lv3 .swap2 { animation: fd .5s backwards; }
+.lv3 .bar-i { transform-origin: left; animation: br 1.2s .3s cubic-bezier(.2,.7,.2,1) backwards; }
+.lv3 .check { stroke-dasharray: 60; animation: ck .8s .35s backwards; }
+.anim .toast { animation: tst .45s cubic-bezier(.2,.7,.2,1) backwards; }
+.anim .drawer { animation: dr .45s cubic-bezier(.2,.7,.2,1) backwards; }
+.anim .scrim { animation: sc .35s backwards; }
+@media (prefers-reduced-motion: reduce) { .site *, .layer * { animation: none !important; transition: none !important; } .scroller { scroll-behavior: auto; } }
+
+/* ===== Option: Blue + Lime sport ===== */
+.sp { --b: #1534C8; --b2: #0E2490; --bl: #8EC5FF; --lm: var(--acc, #FF7A1A); --lmt: var(--acct, #FFB27A); --sink: #0B1020; --g: #F2F4F7; --smu: #5A6275; --dis: "Barlow Condensed", "Arial Narrow", sans-serif; --bd: "Barlow", system-ui, sans-serif;
+  background: #FFFFFF; color: var(--sink); font-family: var(--bd); font-size: 16px; line-height: 1.5; }
+.sp a { color: inherit; text-decoration: none; }
+.sp .w { max-width: 1320px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+.sp-ann { background: var(--sink); color: var(--lm); font-size: 12px; font-weight: 600; letter-spacing: .18em; text-align: center; padding: 9px 16px; }
+.sp-hero { position: relative; background: var(--b); color: #FFFFFF; overflow: hidden; min-height: 780px; }
+.sp-hero::before { content: ""; position: absolute; inset: 0; background: radial-gradient(120% 90% at 85% 10%, rgba(142,197,255,.35), transparent 55%), linear-gradient(180deg, transparent 60%, rgba(14,36,144,.6)); pointer-events: none; }
+.sp-hdr { position: relative; z-index: 4; display: flex; align-items: center; gap: 32px; padding-top: 22px; padding-bottom: 22px; }
+.sp-hdr nav { display: flex; gap: 34px; margin: 0 auto; font-weight: 600; font-size: 15px; }
+.sp-hdr nav a { padding-bottom: 4px; background-image: linear-gradient(var(--lm), var(--lm)); background-size: 0 2px; background-position: 0 100%; background-repeat: no-repeat; transition: background-size .3s; }
+.sp-hdr nav a:hover { background-size: 100% 2px; }
+.sp-icons { display: flex; gap: 6px; align-items: center; }
+.sp-icons .ib { color: #FFFFFF; }
+.sp-icons .bagn { background: var(--lm); color: var(--sink); }
+.sp-hamb { display: none; color: #FFFFFF; }
+.sp-logo svg { width: 176px; height: auto; display: block; }
+.sp-in { position: static; min-height: 680px; display: flex; align-items: center; }
+.sp-copy, .sp-tag { z-index: 3; }
+.sp-copy { position: relative; z-index: 3; max-width: 640px; display: flex; flex-direction: column; gap: 22px; padding-bottom: 60px; }
+.sp-eye { font-weight: 600; font-size: 13px; letter-spacing: .26em; color: var(--lmt); }
+.sp h1 { margin: 0; font-family: var(--dis); font-style: italic; font-weight: 900; font-size: clamp(76px, 11cqi, 168px); line-height: .84; letter-spacing: -.01em; text-transform: uppercase; display: flex; flex-direction: column; }
+.sp h1 .l2 { color: var(--bl); }
+.sp-speed { display: block; height: 4px; width: 260px; background: linear-gradient(90deg, #FFFFFF 0 78%, transparent 78% 82%, var(--lm) 82%); transform: skewX(-24deg); transform-origin: left; }
+.sp-copy p { margin: 0; font-size: 19px; line-height: 1.5; max-width: 34ch; color: #E6ECFF; }
+.sp-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+.sp-btn { display: inline-flex; align-items: center; gap: 10px; background: var(--lm); color: var(--sink) !important; font-family: var(--dis); font-style: italic; font-weight: 800; font-size: 20px; letter-spacing: .04em; text-transform: uppercase; padding: 15px 30px; border-radius: 999px; position: relative; overflow: hidden; transition: transform .25s, box-shadow .25s; }
+.sp-btn:hover { transform: translateY(-2px); box-shadow: 0 16px 30px -14px var(--lm); }
+.sp-btn-o { display: inline-flex; align-items: center; border: 2px solid rgba(255,255,255,.85); color: #FFFFFF !important; font-family: var(--dis); font-style: italic; font-weight: 800; font-size: 20px; letter-spacing: .04em; text-transform: uppercase; padding: 13px 28px; border-radius: 999px; transition: background .25s, color .25s; }
+.sp-btn-o:hover { background: #FFFFFF; color: var(--b) !important; }
+.sp-photo { position: absolute; z-index: 1; inset: 0; }
+.sp-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 70% 40%; display: block; }
+.sp-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(21,52,200,.96) 0%, rgba(21,52,200,.82) 36%, rgba(21,52,200,.25) 64%, rgba(21,52,200,.05) 80%), linear-gradient(180deg, rgba(14,36,144,.8) 0%, rgba(14,36,144,0) 20%); }
+.sp-count { position: absolute; z-index: 4; right: 28px; top: 50%; transform: translateY(-50%); list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 18px; font-family: var(--dis); font-weight: 800; font-size: 18px; color: rgba(255,255,255,.75); text-align: center; background: rgba(11,16,32,.55); backdrop-filter: blur(6px); border-radius: 999px; padding: 14px 10px; }
+.sp-count li.on { color: var(--lmt); }
+.sp-count li.on::after { content: ""; display: block; width: 2px; height: 34px; background: var(--lm); margin: 8px auto 0; }
+.sp-tag { position: absolute; z-index: 3; right: 9%; bottom: 64px; display: flex; align-items: center; gap: 12px; background: #FFFFFF; color: var(--sink); border-radius: 18px; padding: 8px 16px 8px 8px; box-shadow: 0 24px 40px -20px rgba(0,0,0,.5); }
+.sp-tag img { width: 54px; height: 54px; border-radius: 12px; object-fit: cover; }
+.sp-tag b { font-family: var(--dis); font-style: italic; font-weight: 800; font-size: 20px; text-transform: uppercase; display: block; line-height: 1; }
+.sp-tag span { font-weight: 700; color: var(--b); }
+.sp-tag em { position: absolute; top: -10px; left: -10px; background: var(--lm); color: var(--sink); font-style: normal; font-size: 11px; font-weight: 700; letter-spacing: .1em; padding: 4px 8px; border-radius: 999px; }
+
+.sp-new { background: var(--g); }
+.sp-new .w { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 40px; padding-top: 72px; padding-bottom: 72px; align-items: start; }
+.sp-h2 { margin: 0; font-family: var(--dis); font-style: italic; font-weight: 900; font-size: clamp(48px, 5cqi, 72px); line-height: .88; text-transform: uppercase; }
+.sp-side { display: flex; flex-direction: column; gap: 18px; padding-top: 10px; }
+.sp-side .sp-speed { width: 70px; height: 4px; background: linear-gradient(90deg, var(--sink) 0 70%, transparent 70% 78%, var(--b) 78%); }
+.sp-side p { margin: 0; color: var(--smu); font-size: 16px; }
+.sp-all { display: inline-flex; gap: 14px; align-items: center; font-weight: 700; letter-spacing: .08em; font-size: 14px; border-bottom: 2px solid var(--sink); align-self: flex-start; padding-bottom: 3px; }
+.sp-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(max(150px, calc((100% - 54px) / 4)), 1fr)); gap: 18px; position: relative; }
+.sp-card { background: #FFFFFF; border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; transition: transform .3s, box-shadow .3s; }
+.sp-card:hover { transform: translateY(-6px); box-shadow: 0 24px 40px -26px rgba(11,16,32,.45); }
+.sp-card .im { position: relative; aspect-ratio: 1; overflow: hidden; background: #E9EDF3; }
+.sp-card .im img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s; }
+.sp-card:hover .im img { transform: scale(1.06); }
+.sp-badge { position: absolute; top: 10px; left: 10px; background: var(--lm); color: var(--sink); font-size: 11px; font-weight: 700; letter-spacing: .12em; padding: 4px 9px; border-radius: 6px; }
+.sp-card .tx { padding: 14px 14px 16px; display: flex; flex-direction: column; gap: 2px; }
+.sp-card .tx b { font-weight: 700; font-size: 15px; }
+.sp-card .tx small { color: var(--smu); font-size: 13px; }
+.sp-card .row { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+.sp-card .row span { font-weight: 700; color: var(--b); }
+.sp-heart { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid #D3D9E3; display: grid; place-items: center; color: var(--sink); }
+.sp-heart svg { width: 16px; height: 16px; }
+.sp-next { position: absolute; right: -18px; top: 30%; width: 48px; height: 48px; border-radius: 50%; background: #FFFFFF; box-shadow: 0 12px 24px -10px rgba(11,16,32,.35); display: grid; place-items: center; }
+
+.sp-cat .w { padding-top: 80px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 32px; }
+.sp-cat .sp-h2 { text-align: center; }
+.sp-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(max(240px, calc((100% - 36px) / 3)), 1fr)); gap: 18px; }
+.sp-tile { position: relative; aspect-ratio: 4 / 5; border-radius: 22px; overflow: hidden; display: block; }
+.sp-tile img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s; }
+.sp-tile:hover img { transform: scale(1.06); }
+.sp-tile::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(21,52,200,0) 45%, rgba(14,36,144,.9)); }
+.sp-tile .lb { position: absolute; z-index: 2; left: 22px; right: 22px; bottom: 20px; display: flex; justify-content: space-between; align-items: end; color: #FFFFFF; }
+.sp-tile .lb b { font-family: var(--dis); font-style: italic; font-weight: 900; font-size: 44px; line-height: .9; text-transform: uppercase; }
+.sp-tile .lb small { display: block; font-size: 13px; font-weight: 600; letter-spacing: .14em; color: var(--lmt); margin-bottom: 6px; }
+.sp-go { width: 48px; height: 48px; border-radius: 50%; background: var(--lm); color: var(--sink); display: grid; place-items: center; flex: none; }
+
+.sp-drop { background: var(--sink); color: #FFFFFF; }
+.sp-drop .w { display: flex; flex-wrap: wrap; gap: 40px; align-items: center; padding-top: 72px; padding-bottom: 72px; }
+.sp-drop .tx { flex: 1 1 380px; display: flex; flex-direction: column; gap: 20px; }
+.sp-timer { display: flex; gap: 10px; align-items: center; }
+.sp-timer div { background: #161D36; border-radius: 14px; padding: 12px 16px; min-width: 84px; text-align: center; }
+.sp-timer b { display: block; font-family: var(--dis); font-weight: 800; font-size: 46px; line-height: 1; color: var(--lmt); font-variant-numeric: tabular-nums; }
+.sp-timer small { font-size: 11px; letter-spacing: .16em; color: #A9B3CC; }
+.sp-drop .ph2 { flex: 1 1 420px; height: 400px; border-radius: 26px; overflow: hidden; position: relative; }
+.sp-drop .ph2 img { width: 100%; height: 100%; object-fit: cover; }
+
+.sp-why { background: var(--b); color: #FFFFFF; }
+.sp-why .w { display: grid; grid-template-columns: repeat(auto-fill, minmax(max(160px, calc((100% - 72px) / 4)), 1fr)); gap: 24px; padding-top: 56px; padding-bottom: 56px; }
+.sp-why .it { display: flex; gap: 14px; align-items: flex-start; }
+.sp-why .ic { width: 44px; height: 44px; border-radius: 50%; background: var(--lm); color: var(--sink); display: grid; place-items: center; flex: none; }
+.sp-why b { font-family: var(--dis); font-style: italic; font-weight: 800; font-size: 22px; text-transform: uppercase; display: block; line-height: 1.1; }
+.sp-why span { font-size: 14px; color: #D8E1FF; }
+.sp-club .w { display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between; padding-top: 64px; padding-bottom: 64px; }
+.sp-club form { display: flex; gap: 10px; flex: 1 1 360px; flex-wrap: wrap; }
+.sp-club input { flex: 1 1 220px; min-width: 0; padding: 16px 20px; border: 2px solid var(--sink); border-radius: 999px; font: inherit; }
+.sp-club .sp-btn { background: var(--b); color: #FFFFFF !important; }
+.sp-foot { background: var(--sink); color: #C9D1E6; }
+.sp-foot .w { display: grid; grid-template-columns: repeat(auto-fill, minmax(max(150px, calc((100% - 96px) / 5)), 1fr)); gap: 28px; padding-top: 56px; padding-bottom: 40px; font-size: 14px; }
+.sp-foot h4 { margin: 0 0 8px; font-family: var(--dis); font-style: italic; font-weight: 800; font-size: 18px; color: var(--lmt); text-transform: uppercase; }
+.sp-foot a { display: block; padding: 3px 0; }
+.sp-foot a:hover { color: var(--lmt); }
+
+@keyframes spIn { from { opacity: 0; transform: translateX(-60px) skewX(-8deg); } to { opacity: 1; transform: none; } }
+@keyframes spBar { from { transform: skewX(-24deg) scaleX(0); } to { transform: skewX(-24deg) scaleX(1); } }
+@keyframes spZoom { from { transform: scale(1.15); } to { transform: scale(1); } }
+@keyframes spFl { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.sp.enter h1 span { animation: spIn .8s cubic-bezier(.2,.7,.2,1) backwards; }
+.sp.enter h1 .l2 { animation-delay: .15s; }
+.sp.enter .sp-speed { animation: spBar .9s .35s cubic-bezier(.2,.7,.2,1) backwards; }
+.sp.enter .sp-copy p, .sp.enter .sp-ctas, .sp.enter .sp-eye { animation: fu .8s .45s cubic-bezier(.2,.7,.2,1) backwards; }
+.sp.enter .sp-photo img { animation: spZoom 1.8s cubic-bezier(.2,.7,.2,1) backwards; }
+.sp .sp-tag { animation: spFl 4.5s ease-in-out infinite; }
+
+@container site (max-width: 760px) {
+  .sp .w { padding-left: 18px; padding-right: 18px; }
+  .sp-hdr nav, .sp-icons .hide-m { display: none; }
+  .sp-hamb { display: grid; }
+  .sp-hdr { gap: 6px; justify-content: space-between; }
+  .sp-logo svg { width: 140px; }
+  .sp-hero { min-height: 0; }
+  .sp-in { flex-direction: column; align-items: stretch; min-height: 0; }
+  .sp-photo { position: absolute; inset: 0; }
+  .sp-photo img { object-position: 64% 30%; }
+  .sp-photo::after { background: linear-gradient(0deg, rgba(21,52,200,.97) 0%, rgba(21,52,200,.8) 40%, rgba(21,52,200,.15) 70%), linear-gradient(180deg, rgba(14,36,144,.75) 0%, transparent 16%); }
+  .sp-in { min-height: 640px; align-items: flex-end; }
+  .sp-copy { padding-top: 24px; padding-bottom: 48px; }
+  .sp h1 { font-size: 78px; }
+  .sp-copy p { font-size: 17px; }
+  .sp-count { display: none; }
+  .sp-tag { right: 18px; bottom: auto; top: 96px; }
+  .sp-new .w { grid-template-columns: 1fr; gap: 24px; padding-top: 48px; padding-bottom: 48px; }
+  .sp-next { display: none; }
+  .sp-cat .w { padding-top: 56px; padding-bottom: 56px; }
+  .sp-drop .ph2 { height: 260px; }
+  .sp-timer div { min-width: 0; flex: 1; padding: 10px 6px; }
+  .sp-timer b { font-size: 36px; }
+  .sp-foot .w { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+
+/* ===== Option: Bordeaux + energy ===== */
+.en-hero { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr) 44px; gap: 36px; align-items: center; padding-top: 36px; padding-bottom: 72px; }
+.en-copy { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+.en-eye { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: var(--bx); }
+.en-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--bx); box-shadow: 0 0 0 0 rgba(158,31,69,.5); }
+.en-h1 { margin: 0; font-family: var(--serif); font-weight: 400; font-size: clamp(72px, 9.4cqi, 146px); line-height: .88; letter-spacing: -.035em; display: flex; flex-direction: column; }
+.en-h1 span { white-space: nowrap; }
+.en-h1 em { font-size: 1.18em; line-height: .9; }
+.en-h1 em { color: var(--bx); padding-left: .08em; }
+.en-speed { display: block; height: 5px; width: 300px; max-width: 70%; background: linear-gradient(90deg, var(--ink) 0 64%, transparent 64% 68%, var(--bx) 68% 88%, transparent 88% 91%, var(--ch) 91%); transform: skewX(-24deg); transform-origin: left; }
+.en-copy p { margin: 0; font-size: 19px; max-width: 40ch; color: var(--tx2); }
+.en-vis { position: relative; display: flex; justify-content: center; }
+.en-vis .hero-blob { width: 84%; top: 4%; right: -6%; }
+.en-vis .hero-img { max-width: 600px; }
+.en-count { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 18px; align-items: center; font-family: var(--mono); font-size: 14px; color: var(--mu); }
+.en-count li.on { color: var(--bx); font-weight: 500; }
+.en-count li.on::after { content: ""; display: block; width: 2px; height: 40px; background: var(--bx); margin: 10px auto 0; }
+.en-band { background: var(--bx); color: var(--ch); overflow: hidden; white-space: nowrap; padding: 22px 0; }
+.en-band .marq { gap: 44px; padding-left: 44px; font-family: var(--serif); font-style: italic; font-size: 44px; line-height: 1; }
+.en-band .marq span.s { color: var(--ro); font-style: normal; font-size: 30px; }
+.en-drop { background: var(--ink); color: var(--pa); border-radius: 36px; display: flex; flex-wrap: wrap; gap: 40px; align-items: center; padding: 56px; }
+.en-drop .tx { flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+.en-timer { display: flex; gap: 12px; }
+.en-timer div { background: #2A141D; border-radius: 18px; padding: 14px 18px; min-width: 96px; text-align: center; box-shadow: inset 0 0 0 1px rgba(233,211,166,.18); }
+.en-timer b { display: block; font-family: var(--serif); font-weight: 400; font-size: 56px; line-height: 1; color: var(--ch); font-variant-numeric: tabular-nums; }
+.en-timer small { font-size: 11px; letter-spacing: .2em; color: #CDB8BF; }
+.en-drop .ph { flex: 1 1 380px; height: 420px; border-radius: 999px 999px 26px 26px; }
+
+
+.en-full { position: relative; overflow: hidden; color: var(--pa); min-height: 900px; display: flex; align-items: center; }
+.en-full > .bg { position: absolute; inset: 0; }
+.en-full > .bg img { width: 100%; height: 100%; object-fit: cover; object-position: 72% 28%; display: block; }
+.en-full > .bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(28,11,18,.7) 0%, rgba(28,11,18,0) 24%), linear-gradient(90deg, rgba(28,11,18,.9) 0%, rgba(28,11,18,.7) 34%, rgba(28,11,18,.18) 62%, rgba(28,11,18,0) 78%), linear-gradient(0deg, rgba(28,11,18,.55) 0%, rgba(28,11,18,0) 30%); }
+.en-full .en-in { position: relative; z-index: 2; width: 100%; padding-top: 190px; padding-bottom: 80px; }
+.en-full .en-copy { max-width: 660px; }
+.en-full .en-eye { color: var(--ch); }
+.en-full .en-dot { background: var(--ro); }
+.en-full .en-h1 { color: var(--pa); }
+.en-full .en-h1 em { color: var(--ch); }
+.en-full .en-speed { background: linear-gradient(90deg, var(--pa) 0 64%, transparent 64% 68%, var(--ro) 68% 88%, transparent 88% 91%, var(--ch) 91%); }
+.en-full .en-copy p { color: #F1E6E9; }
+.en-full .trust { color: #E8DCDF; }
+.en-full .btn-o { border-color: var(--pa); color: var(--pa) !important; }
+.en-full .en-count { position: absolute; z-index: 3; right: 32px; top: 50%; transform: translateY(-50%); color: rgba(255,251,250,.7); }
+.en-full .en-count li.on { color: var(--ch); }
+.en-full .en-count li.on::after { background: var(--ch); }
+.en-full .badge-spin { top: 150px; left: auto; right: 13%; z-index: 3; }
+.en-full .chipcard { left: auto; right: 9%; bottom: 72px; z-index: 3; }
+@container site (max-width: 760px) {
+  .en-full { min-height: 700px; align-items: flex-end; }
+  .en-full > .bg img { object-position: 62% 18%; }
+  .en-full > .bg::after { background: linear-gradient(180deg, rgba(28,11,18,.7) 0%, rgba(28,11,18,0) 18%), linear-gradient(0deg, rgba(28,11,18,.94) 0%, rgba(28,11,18,.7) 42%, rgba(28,11,18,.1) 72%); }
+  .en-full { min-height: 760px; }
+  .en-full .en-in { padding-top: 300px; padding-bottom: 40px; }
+  .en-full .badge-spin { top: 84px; right: 18px; width: 84px; height: 84px; }
+  .en-full .chipcard { right: 18px; bottom: auto; top: 186px; }
+}
+
+
+.en-full .hdr-ov { position: absolute; top: 0; left: 0; right: 0; z-index: 6; background: transparent; backdrop-filter: none; border-bottom: 1px solid rgba(255,251,250,.2); color: var(--pa); }
+.en-full .hdr-ov .ib, .en-full .hdr-ov .hdr-search { color: var(--pa); }
+.en-full .hdr-ov .navrow a { color: var(--pa); }
+.en-full .hdr-ov .navrow a.sale { color: var(--ro); }
+
+@keyframes enIn { from { opacity: 0; transform: translateX(-70px) skewX(-6deg); } to { opacity: 1; transform: none; } }
+@keyframes enBar { from { transform: skewX(-24deg) scaleX(0); } to { transform: skewX(-24deg) scaleX(1); } }
+@keyframes enPulse { 0% { box-shadow: 0 0 0 0 rgba(158,31,69,.55); } 100% { box-shadow: 0 0 0 12px rgba(158,31,69,0); } }
+.en.enter .en-h1 span, .en.enter .en-h1 em { animation: enIn .9s cubic-bezier(.2,.7,.2,1) backwards; }
+.en.enter .en-h1 em { animation-delay: .16s; }
+.en.enter .en-speed { animation: enBar 1s .4s cubic-bezier(.2,.7,.2,1) backwards; }
+.en .en-dot { animation: enPulse 1.6s ease-out infinite; }
+
+@container site (max-width: 760px) {
+  .en-hero { grid-template-columns: 1fr; gap: 28px; padding-top: 20px; padding-bottom: 48px; }
+  .en-h1 { font-size: 68px; }
+  .en-copy p { font-size: 16px; }
+  .en-count { display: none; }
+  .en-band { padding: 14px 0; }
+  .en-band .marq { font-size: 30px; }
+  .en-drop { padding: 30px 22px; border-radius: 28px; gap: 24px; }
+  .en-timer div { min-width: 0; flex: 1; padding: 10px 6px; }
+  .en-timer b { font-size: 40px; }
+  .en-drop .ph { height: 300px; }
+}
+
+/* ===== Compare canvas chrome ===== */
+.cbar { background: var(--c-bar); border-bottom: 1px solid var(--c-ln); padding-block: 10px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; position: relative; z-index: 5; }
+.cbar h1 { margin: 0 auto 0 0; font-size: 15px; font-weight: 700; white-space: nowrap; }
+.cbtn { font: inherit; font-size: 13px; font-weight: 500; border: 1px solid var(--c-ln); background: var(--c-bar); color: var(--c-fg); padding: 7px 12px; border-radius: 10px; cursor: pointer; white-space: nowrap; }
+.accs { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.accs button { display: inline-flex; align-items: center; gap: 7px; font: inherit; font-size: 13px; border: 1px solid var(--c-ln); background: var(--c-bar); color: var(--c-fg); padding: 5px 11px 5px 6px; border-radius: 999px; cursor: pointer; white-space: nowrap; }
+.accs button i { width: 18px; height: 18px; border-radius: 50%; box-shadow: inset 0 0 0 3px #1534C8; }
+.accs button[aria-pressed="true"] { border-color: var(--c-fg); box-shadow: 0 0 0 1px var(--c-fg); }
+.zoomv { font-family: var(--mono); font-size: 12px; min-width: 46px; text-align: center; color: var(--c-mu); }
+.vp { flex: 1; min-height: 0; position: relative; overflow: hidden; cursor: grab; touch-action: none; background-color: var(--c-bg); background-image: radial-gradient(var(--c-ln) 1.2px, transparent 1.2px); background-size: 22px 22px; }
+.vp.drag { cursor: grabbing; }
+.hint { position: absolute; left: 50%; bottom: max(14px, env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--c-bar); color: var(--c-mu); font-size: 12px; padding: 7px 14px; border-radius: 999px; box-shadow: 0 0 0 1px var(--c-ln); white-space: nowrap; pointer-events: none; max-width: calc(100% - 32px); overflow: hidden; text-overflow: ellipsis; }
+.world { position: absolute; left: 0; top: 0; transform-origin: 0 0; padding: 160px; display: flex; flex-direction: column; gap: 240px; width: max-content; }
+.crow { display: flex; gap: 140px; align-items: flex-start; }
+.fr { display: flex; flex-direction: column; gap: 26px; }
+.fl { font-family: var(--sans); font-size: 44px; color: var(--c-fg); font-weight: 700; white-space: nowrap; }
+.fl span { color: var(--c-mu); font-weight: 400; }
+.fb { container: site / inline-size; position: relative; overflow: hidden; border-radius: 12px; box-shadow: 0 0 0 2px var(--c-ln), 0 40px 90px -50px rgba(0,0,0,.45); background: #FFFFFF; }
+.fb.mob { border-radius: 40px; box-shadow: 0 0 0 12px var(--c-frame), 0 40px 90px -40px rgba(0,0,0,.5); }
+.world a, .world button, .world input, .world label { pointer-events: none; }
+.sp-card, .sp-tile, .sp-btn, .sp-btn-o, .sp-hdr nav a, .lv3 .zoom, .lv3 .lift, .lv3 .btn { pointer-events: auto; }
+</style>
+
+<div class="cbar" role="region" aria-label="Compare controls">
+  <h1>Jazz94 · three home directions</h1>
+  <div class="accs" role="group" aria-label="Accent colour" id="accs"></div>
+  <button type="button" class="cbtn" id="bD">Desktop side by side</button>
+  <button type="button" class="cbtn" id="bM">Mobile side by side</button>
+  <button type="button" class="cbtn" id="fit">Fit all</button>
+  <span style="display:inline-flex;align-items:center;gap:4px"><button type="button" class="cbtn" id="zout" aria-label="Zoom out">−</button><span class="zoomv" id="zv">40%</span><button type="button" class="cbtn" id="zin" aria-label="Zoom in">+</button></span>
+</div>
+<div class="vp" id="vp" aria-label="Comparison canvas"><div class="world" id="world"></div><div class="hint">Drag to move · pinch or Ctrl/⌘ + scroll to zoom</div></div>
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const IMG = (n) => 'img/' + n + '.jpg';
+  const fmt = (n) => '₹' + Math.round(n).toLocaleString('en-IN');
+
+  const P = [
+    { id: 'bebop', n: 'Bebop Round Sunglasses', c: 'Sunglasses', p: 2499, img: 'sun-round', tag: 'New drop', dots: ['#C9A45C', '#B9BEC6', '#1C0B12'] },
+    { id: 'midnight', n: 'Midnight Set Watch', c: 'Watches', p: 6999, img: 'watch-red', tag: 'New drop', dots: ['#8E8E93', '#C9A45C', '#1C0B12'] },
+    { id: 'skate', n: 'Bordeaux Skate Sneakers', c: 'Shoes', p: 3299, img: 'shoe-burg', tag: 'Bestseller', dots: ['#7A1D33', '#1C0B12', '#D9C7A8'] },
+    { id: 'riviera', n: 'Riviera Tortoise Sunglasses', c: 'Sunglasses', p: 2899, img: 'sun-tort', tag: '', dots: ['#8A5A2B', '#1C0B12', '#C9A45C'] },
+    { id: 'rhapsody', n: 'Rose Rhapsody Chrono', c: 'Watches', p: 5499, img: 'watch-rose', tag: '', dots: ['#D9A38B', '#8E8E93', '#1C0B12'] },
+    { id: 'brogue', n: 'Peach Bossa Brogues', c: 'Shoes', p: 5999, img: 'shoe-brogue', tag: 'Limited', dots: ['#2E7D6B', '#6B4A2B', '#1C0B12'] },
+    { id: 'swing', n: 'Minimal Swing Watch', c: 'Watches', p: 3999, img: 'watch-min', tag: '', dots: ['#6B4A2B', '#1C0B12', '#8E8E93'] },
+    { id: 'heels', n: 'Floral Scat Heels', c: 'Shoes', p: 4299, img: 'shoe-heels', tag: '', dots: ['#2F5DA8', '#FF7A9C', '#1C0B12'] },
+    { id: 'nightshift', n: 'Night Shift Steel', c: 'Watches', p: 7499, img: 'watch-dark', tag: 'Limited', dots: ['#1C0B12', '#8E8E93', '#C9A45C'] },
+    { id: 'monk', n: 'Ballad Monk Straps', c: 'Shoes', p: 6499, img: 'shoe-monk', tag: '', dots: ['#6B4A2B', '#1C0B12', '#7A1D33'] }
+  ];
+  const byId = (id) => P.find((p) => p.id === id) || P[0];
+  const VAR = {
+    Sunglasses: { a: 'Frame', an: ['Gold', 'Silver', 'Black'], b: 'Lens', bn: ['Bottle green', 'Brown', 'Rose'], desc: 'Lightweight frames with UV400 lenses. Polished, easy to wear and made for long summer days with a little swing.', det: 'UV400 protection. Comes with a Jazz94 keepsake case and microfibre cloth.', fit: 'Medium fit. Lens 50 mm · Bridge 21 mm · Temple 145 mm.', care: 'Wipe with the microfibre cloth and keep in the case when not worn.' },
+    Watches: { a: 'Case', an: ['Steel', 'Gold', 'Black'], b: 'Strap', bn: ['Steel link', 'Leather', 'Mesh'], desc: 'A 40 mm case, sapphire glass and a dial with a little swing. Dressed up or down, it keeps the beat.', det: 'Sapphire crystal. 5 ATM water resistance. Two-year warranty. Free engraving.', fit: '40 mm case · 20 mm strap · fits wrists 15–20 cm.', care: 'Wipe with a soft dry cloth. Keep perfume and hot water away from the strap.' },
+    Shoes: { a: 'Colour', an: ['Signature', 'Black', 'Tan'], b: 'Size (UK)', bn: ['6', '7', '8', '9', '10', '11'], desc: 'Cushioned insoles, sturdy soles and a shape made for dancing. Break-in time: almost none.', det: 'Leather or suede upper. Rubber sole. Cushioned footbed.', fit: 'True to size. Between sizes? Go half a size up.', care: 'Brush suede gently. Wipe leather with a damp cloth and let it air dry.' }
+  };
+  const LIFE = [{ img: 'hero', alt: 'Styled with a bordeaux coat' }, { img: 'man', alt: 'Worn with a bordeaux sweater' }, { img: 'woman', alt: 'Street style with a black jacket' }];
+
+  const ic = {
+    search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>',
+    user: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>',
+    heart: (f) => '<svg viewBox="0 0 24 24" fill="' + (f ? 'currentColor' : 'none') + '" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>',
+    bag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>',
+    menu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>',
+    close: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+    arrow: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+    lock: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
+    box: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 7l9-4 9 4v10l-9 4-9-4z"/><path d="M3 7l9 4 9-4M12 11v10"/></svg>',
+    help: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14M12 17.5v.5"/></svg>'
+  };
+  const svc = [
+    { t: 'Free delivery', d: 'On every order over ₹999.', i: 'M3 6h11v10H3zM14 10h4l3 3v3h-7M7 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM17 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4z' },
+    { t: '15-day returns', d: 'Free pickup from your door.', i: 'M4 12a8 8 0 1 0 3-6.2M4 4v4h4' },
+    { t: 'Cash on delivery', d: 'Pay when your order arrives.', i: 'M3 6h18v12H3zM12 14.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z' },
+    { t: 'Gift-ready', d: 'Every order ships in a keepsake box.', i: 'M3 9h18v12H3zM3 13h18M12 9v12M12 9c-2-4-6-4-6-1s6 1 6 1zm0 0c2-4 6-4 6-1s-6 1-6 1z' }
+  ];
+
+  function logo(dark, w) {
+    return '<svg ' + (w ? 'width="' + w + '" ' : '') + 'viewBox="0 0 362 106" role="img" aria-label="Jazz94"><rect x="2" y="2" width="100" height="100" rx="26" fill="#E9D3A6"/><rect x="9" y="9" width="86" height="86" rx="20" fill="none" stroke="#FF7A9C" stroke-opacity=".7" stroke-width="1.2"/><text x="41" y="57" font-family="\'DM Serif Display\', Georgia, serif" font-size="70" fill="#1C0B12" text-anchor="middle" dominant-baseline="central">J</text><text x="79" y="30" font-family="\'DM Serif Display\', Georgia, serif" font-size="21" fill="#9E1F45" text-anchor="middle" dominant-baseline="central">94</text><text x="126" y="54" font-family="\'DM Sans\', sans-serif" font-weight="500" font-size="40" fill="' + (dark ? '#FFFBFA' : '#1C0B12') + '" letter-spacing="9">JAZZ94</text><text x="128" y="78" font-family="\'DM Sans\', sans-serif" font-weight="500" font-size="10" fill="' + (dark ? '#E9D3A6' : '#1C0B12') + '" fill-opacity="' + (dark ? '1' : '.65') + '" letter-spacing="4.5">SHADES · WATCHES · KICKS</text></svg>';
+  }
+
+  const PAGES = [['home', 'Home'], ['cat', 'New In'], ['pdp', 'Product'], ['cart', 'Bag'], ['checkout', 'Checkout']];
+  const NOTES = {
+    home: ['Announcement ticker: delivery, returns and Friday drops.', 'Two-tier header: search, centred monogram, account, wishlist, bag; categories below. On mobile: hamburger menu, logo and bag.', 'Hero: campaign photo, two-line headline, two CTAs and a trust line.', 'Three large category tiles.', 'New arrivals with category tabs; wishlist and quick add on every card.', 'Lookbook story with three linked products.', 'Dark watch banner to lift the highest-value category.', 'Social grid for proof and fun.', 'Service promises.', 'Newsletter: Join the Club.', 'Footer: shop, help, about and payment marks.'],
+    cat: ['Breadcrumb.', 'Category banner with mood copy and item count.', 'Category chips and sort. On mobile, filters open from a Filters button.', 'Filter panel: price, colour, size.', 'Product grid with editorial tiles every fifth place; three per row on desktop, two on mobile.', 'End-of-list message instead of page numbers.'],
+    pdp: ['Square gallery with packshot and lifestyle thumbnails.', 'Name, price with tax note and short description.', 'Variant pickers change by category: frame and lens, case and strap, or colour and size.', 'Quantity, Add to bag and wishlist. Sticks to the bottom of the screen on mobile.', 'Pincode check for a delivery estimate.', 'Accordion: details, size and fit, care, shipping and returns.', 'Cross-sell from the other categories.', 'Reviews with an empty state for a new brand.'],
+    cart: ['Title with item count.', 'Free-delivery progress bar.', 'Line items with quantity, wishlist and remove; totals update instantly.', 'Summary with coupon, gift wrap and one Checkout button.', 'Recommendations.'],
+    checkout: ['Header stripped to logo and a secure-checkout cue.', 'Progress: address, delivery, payment.', 'Contact and address with pincode autofill.', 'Delivery speed as large radio cards.', 'Payment: UPI first, then cards, netbanking, cash on delivery.', 'Place order states the total; a confirmation screen follows.', 'Order summary; on mobile it moves above the form.']
+  };
+
+  const S = {
+    lv: 3, page: 'home', dev: 'desktop', tab: 'All', catTab: 'All', sort: 'featured', liked: {}, filt: false,
+    pid: 'bebop', gi: 0, va: 0, vb: 0, qty: 1, acc: 0, pin: '', pinOk: false,
+    bag: [{ id: 'bebop', q: 1, v: 'Gold · Bottle green' }, { id: 'midnight', q: 1, v: 'Steel · Steel link' }],
+    code: '', applied: false, tried: false, gift: false, ship: 0, pay: 0, placed: false,
+    menu: false, toast: null, bump: 0, swap: 0
+  };
+  try { const sv = JSON.parse(localStorage.getItem('jazz94-mock-view') || 'null'); if (sv) { S.lv = sv.lv || 3; S.dev = sv.dev || 'desktop'; } } catch (e) {}
+
+  const bagCount = () => S.bag.reduce((a, x) => a + x.q, 0);
+  const popCls = () => (S.bump % 2 ? 'pa' : 'pb');
+
+  /* ---------- shared pieces ---------- */
+  function header() {
+    const tick = ['FREE DELIVERY OVER ₹999', '15-DAY EASY RETURNS', 'NEW DROPS EVERY FRIDAY', 'GIFT-READY PACKAGING'].map((t) => '<span>' + t + '</span><span class="s">✦</span>').join('');
+    const navs = ['Sunglasses', 'Watches', 'Shoes', 'New In', 'Gifts'].map((c) => '<a href="#" data-go="cat" data-v="' + (c === 'New In' || c === 'Gifts' ? 'All' : c) + '"' + (S.page === 'cat' && (S.catTab === c || (c === 'New In' && S.catTab === 'All')) ? ' aria-current="page"' : '') + '>' + c + '</a>').join('') + '<a href="#" class="sale" data-go="cat" data-v="All">Sale</a>';
+    const hn = S.page === 'home';
+    return '<div class="ticker"' + (hn ? ' data-n="1"' : '') + '><div class="marq">' + tick + tick + '</div></div>' +
+      '<header class="hdr"' + (hn ? ' data-n="2"' : '') + '><div class="w hdr-top">' +
+      '<div class="hdr-l"><button type="button" class="ib hamb" data-act="menu" aria-label="Open menu" aria-expanded="' + S.menu + '">' + ic.menu + '</button><button type="button" class="ib hdr-search" aria-label="Search">' + ic.search + '<span class="lbl">Search</span></button></div>' +
+      '<a href="#" class="logo-l" data-go="home" aria-label="Jazz94 home">' + logo(false) + '</a>' +
+      '<div class="hdr-r"><button type="button" class="ib hide-m" aria-label="Account">' + ic.user + '</button><button type="button" class="ib hide-m" aria-label="Wishlist">' + ic.heart(false) + '</button><a href="#" class="ib" data-go="cart" aria-label="Bag, ' + bagCount() + ' items">' + ic.bag + '<span class="bagn ' + popCls() + '">' + bagCount() + '</span></a></div>' +
+      '</div><nav class="w navrow" aria-label="Main">' + navs + '</nav></header>';
+  }
+  function footer() {
+    const cols = [['Shop', ['Sunglasses', 'Watches', 'Shoes', 'New In', 'Gift cards']], ['Help', ['Track order', 'Shipping', 'Returns', 'Size guide', 'Contact us']], ['About', ['Our story', 'Stores', 'Careers', 'Press']], ['The Club', ['Join the Club', 'Friday drops', 'Refer a friend']]];
+    return '<footer class="ftr"' + (S.page === 'home' ? ' data-n="11"' : '') + '><div class="w ftr-cols"><div style="display:flex;flex-direction:column;gap:14px">' + logo(true, 162) + '<span style="font-size:14px;max-width:28ch">Shades, watches and kicks with a little swing.</span><span style="font-size:14px;color:var(--ch)">Instagram · YouTube · Pinterest</span></div>' +
+      cols.map((c) => '<div><h4>' + c[0] + '</h4>' + c[1].map((l) => '<a href="#" data-go="cat" data-v="All">' + l + '</a>').join('') + '</div>').join('') +
+      '</div><div class="w ftr-b"><span>© 2026 Jazz94 · Privacy · Terms</span><span>UPI · Visa · Mastercard · RuPay · Cash on delivery</span></div></footer>';
+  }
+  function card(p) {
+    const on = !!S.liked[p.id];
+    return '<div class="card lift">' + (p.tag ? '<span class="tag">' + p.tag + '</span>' : '') +
+      '<button type="button" class="heart ' + (on ? popCls() : '') + '" data-act="like" data-v="' + p.id + '" aria-pressed="' + on + '" aria-label="' + (on ? 'Remove ' : 'Save ') + p.n + (on ? ' from' : ' to') + ' wishlist">' + ic.heart(on) + '</button>' +
+      '<a href="#" class="ph zoom" data-go="pdp" data-v="' + p.id + '"><img src="' + IMG(p.img) + '" alt="' + p.n + '" loading="lazy"></a>' +
+      '<div class="meta"><span class="cat-l">' + p.c + '</span><a href="#" class="pname" data-go="pdp" data-v="' + p.id + '">' + p.n + '</a>' +
+      '<span class="dots">' + p.dots.map((d) => '<i style="background:' + d + '"></i>').join('') + '</span>' +
+      '<div class="pr"><span class="mono">' + fmt(p.p) + '</span><button type="button" class="btn btn-d btn-sm" data-act="add" data-v="' + p.id + '" aria-label="Add ' + p.n + ' to bag">Add +</button></div></div></div>';
+  }
+  function notes() {
+    if (S.lv !== 1) return '';
+    return '<section class="notes"><b>Notes for this page</b><ol>' + NOTES[S.page].map((n) => '<li>' + n + '</li>').join('') + '</ol></section>';
+  }
+
+  /* ---------- pages ---------- */
+  function home() {
+    const pool = (S.tab === 'All' ? P : P.filter((p) => p.c === S.tab)).slice(0, 4);
+    const cats = [['Sunglasses', 'From ₹1,999', 'sun-tort', 'Tortoiseshell sunglasses by the sea'], ['Watches', 'From ₹3,999', 'watch-red', 'Steel watch on a red book'], ['Shoes', 'From ₹2,999', 'shoe-brogue', 'Green suede brogue on a pastel stage']];
+    const look = ['riviera', 'midnight', 'monk'].map(byId);
+    const ugc = [['woman', 'Woman in red sunglasses'], ['hero', 'Shopper in a bordeaux coat'], ['sun-sand', 'Sunglasses on beach sand'], ['shoe-heels', 'Floral heels'], ['watch-rose', 'Rose gold chronograph']];
+    return header() +
+      '<section class="w hero" data-n="3"><div class="hero-t">' +
+      '<span class="kick fu" style="display:flex;align-items:center;gap:12px"><span style="width:36px;height:1.5px;background:var(--bx)"></span>The Summer \'94 Edit</span>' +
+      '<h2 class="fu d1">Wear the<br><em>groove.</em></h2>' +
+      '<p class="fu d2">Statement shades, steel watches and sneakers made to move. Fresh pieces drop every Friday.</p>' +
+      '<div class="fu d3" style="display:flex;flex-wrap:wrap;gap:12px"><a href="#" class="btn btn-p" data-go="cat" data-v="All">Shop the edit ' + ic.arrow + '</a><a href="#" class="btn btn-o" data-go="cat" data-v="Watches">Explore watches</a></div>' +
+      '<div class="trust fu d4"><span>✦ Free delivery over ₹999</span><span>✦ 15-day easy returns</span><span>✦ Cash on delivery</span></div></div>' +
+      '<div class="hero-v"><div class="hero-blob"></div><div class="ph hero-img fu d1"><img class="kb" src="' + IMG('hero') + '" alt="Model in a bordeaux coat and sunglasses carrying shopping bags"></div>' +
+      '<svg class="badge-spin" viewBox="0 0 124 124" role="img" aria-label="New drop every Friday"><defs><path id="ring" d="M62 62 m-46 0 a46 46 0 1 1 92 0 a46 46 0 1 1 -92 0"/></defs><circle cx="62" cy="62" r="60" fill="#9E1F45"/><text font-family="\'DM Sans\', sans-serif" font-size="11" font-weight="700" letter-spacing="3" fill="#FFFBFA"><textPath href="#ring" textLength="284" lengthAdjust="spacing">NEW DROP · EVERY FRIDAY ·</textPath></text><text x="62" y="70" text-anchor="middle" font-family="\'DM Serif Display\', Georgia, serif" font-size="26" fill="#E9D3A6">94</text></svg>' +
+      '<a href="#" class="chipcard" data-go="pdp" data-v="bebop"><span class="ph"><img src="' + IMG('sun-round') + '" alt=""></span><span style="display:flex;flex-direction:column;line-height:1.25"><b class="serif" style="font-size:17px">Bebop Round</b><span class="mono" style="font-size:13px;color:var(--bx)">₹2,499</span></span></a></div></section>' +
+      '<section class="w sec" data-n="4"><div class="row"><h2 class="h2">Shop by category</h2><a href="#" data-go="cat" data-v="All" style="font-weight:700;font-size:14px;letter-spacing:.08em;text-decoration:none">View all new in →</a></div><div class="g3">' +
+      cats.map((c) => '<a href="#" class="tile ph zoom" data-go="cat" data-v="' + c[0] + '" style="border-radius:28px"><img src="' + IMG(c[2]) + '" alt="' + c[3] + '" loading="lazy"><span class="shade"></span><span class="cap"><span><small>' + c[1] + '</small><b>' + c[0] + '</b></span><span class="arrow">' + ic.arrow + '</span></span></a>').join('') + '</div></section>' +
+      '<section class="w sec" data-n="5"><div class="row"><div><span class="kick">Just landed</span><h2 class="h2" style="margin-top:8px">New this Friday</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap" role="group" aria-label="Filter new arrivals">' +
+      ['All', 'Sunglasses', 'Watches', 'Shoes'].map((t) => '<button type="button" class="chip" data-act="tab" data-v="' + t + '" aria-pressed="' + (S.tab === t) + '">' + t + '</button>').join('') + '</div></div><div class="g4">' + pool.map(card).join('') + '</div></section>' +
+      '<section class="w sec" data-n="6"><div class="edit"><div class="ph zoom"><img src="' + IMG('man') + '" alt="Man in a bordeaux sweater and sunglasses" loading="lazy"></div><div class="edit-t"><span class="kick">Lookbook · No. 01</span><h2 class="h2" style="font-size:clamp(40px,4.6cqi,64px)">Dressed for the <em>late set.</em></h2><p style="margin:0;color:var(--tx2);max-width:44ch">Tortoise frames, a steel watch and polished monk straps. The after-hours uniform, ready in three clicks.</p><div style="display:flex;flex-direction:column;gap:10px">' +
+      look.map((p) => '<a href="#" class="look" data-go="pdp" data-v="' + p.id + '"><span class="ph"><img src="' + IMG(p.img) + '" alt=""></span><span style="flex:1;min-width:0;font-weight:500">' + p.n + '</span><span class="mono" style="font-size:14px;color:var(--bx)">' + fmt(p.p) + '</span></a>').join('') +
+      '</div><a href="#" class="btn btn-d" data-go="cat" data-v="All" style="align-self:flex-start">Shop the look</a></div></div></section>' +
+      '<section class="w sec" data-n="7"><div class="banner"><div style="flex:1 1 340px;min-width:0;display:flex;flex-direction:column;gap:18px"><span class="kick" style="color:var(--ch)">Watches</span><h2 class="h2" style="font-size:clamp(40px,4.6cqi,64px)">Time keeps <em style="color:var(--ro)">the beat.</em></h2><p style="margin:0;color:#E8DCDF;max-width:40ch">Steel cases, sapphire glass and dials with a little swing. Built for every set, from soundcheck to encore.</p><a href="#" class="btn btn-c" data-go="cat" data-v="Watches" style="align-self:flex-start">Explore watches</a></div><div class="ph zoom"><img src="' + IMG('watch-dark') + '" alt="Steel watch with a black dial" loading="lazy"></div></div></section>' +
+      '<section class="w sec" data-n="8"><div class="row"><h2 class="h2">#WearTheGroove</h2><span style="color:var(--mu)">Tag @jazz94 to be featured</span></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(max(140px,calc((100% - 64px) / 5)),1fr));gap:16px">' +
+      ugc.map((u) => '<div class="ph zoom" style="aspect-ratio:1;border-radius:22px"><img src="' + IMG(u[0]) + '" alt="' + u[1] + '" loading="lazy"></div>').join('') + '</div></section>' +
+      '<section class="w sec" data-n="9"><div class="svc">' + svc.map((s) => '<div><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="' + s.i + '"/></svg></span><b>' + s.t + '</b><span style="font-size:14px;color:var(--mu)">' + s.d + '</span></div>').join('') + '</div></section>' +
+      '<section class="club" data-n="10"><div class="w"><div style="flex:1 1 360px;display:flex;flex-direction:column;gap:10px"><h2 class="h2" style="color:var(--pa)">Join the Club</h2><p style="margin:0;color:#F6E4E9">Early access to Friday drops and members-only offers. No spam, ever.</p></div><form style="flex:1 1 360px;display:flex;gap:10px;flex-wrap:wrap" onsubmit="return false"><label for="em" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Email address</label><input id="em" type="email" placeholder="Your email address"><button type="button" class="btn btn-c" data-act="join">Join</button></form></div></section>' +
+      footer() + notes();
+  }
+
+  function cat() {
+    let list = S.catTab === 'All' ? P.slice() : P.filter((p) => p.c === S.catTab);
+    if (S.sort === 'low') list.sort((a, b) => a.p - b.p);
+    if (S.sort === 'high') list.sort((a, b) => b.p - a.p);
+    let cells = list.map(card);
+    if (S.catTab === 'All' && S.sort === 'featured') {
+      cells.splice(4, 0, '<a href="#" class="promo ph zoom" data-go="home"><img src="' + IMG('woman') + '" alt="Woman in red sunglasses" loading="lazy"><span class="shade"></span><span class="t"><small>Lookbook</small><b>Loud shades, louder Fridays</b></span></a>');
+      cells.splice(9, 0, '<a href="#" class="promo ph zoom" data-go="cat" data-v="Watches"><img src="' + IMG('watch-rose') + '" alt="Rose gold chronograph" loading="lazy"><span class="shade"></span><span class="t"><small>Gifting</small><b>Free engraving on every watch</b></span></a>');
+    }
+    const title = S.catTab === 'All' ? 'New <em style="color:var(--ro)">In</em>' : S.catTab;
+    const count = (t) => (t === 'All' ? P.length : P.filter((p) => p.c === t).length);
+    return header() +
+      '<nav class="w crumb" aria-label="Breadcrumb" data-n="1"><a href="#" data-go="home">Home</a> / ' + (S.catTab === 'All' ? 'New In' : S.catTab) + '</nav>' +
+      '<section class="w"><div class="cbanner ph fu" data-n="2"><img class="kb" src="' + IMG('sun-sand') + '" alt="Sunglasses on warm beach sand"><span class="shade"></span><div class="t"><span class="kick" style="color:var(--ch)">Friday drop · ' + list.length + ' pieces</span><h1 class="serif" style="margin:0;font-size:clamp(48px,6cqi,84px);line-height:.95">' + title + '</h1><p style="margin:0;color:#F1E6E9">Fresh frames, watches and shoes for the season. Get them before the weekend.</p></div></div></section>' +
+      '<section class="w ctools" data-n="3"><div style="display:flex;gap:8px;flex-wrap:wrap" role="group" aria-label="Category">' +
+      ['All', 'Sunglasses', 'Watches', 'Shoes'].map((t) => '<button type="button" class="chip" data-act="ctab" data-v="' + t + '" aria-pressed="' + (S.catTab === t) + '">' + t + ' <span style="opacity:.6">' + count(t) + '</span></button>').join('') +
+      '</div><div style="display:flex;gap:10px;align-items:center"><button type="button" class="btn btn-o btn-sm mfilt" data-act="filt" aria-expanded="' + S.filt + '">Filters</button><label for="sort" style="font-size:14px;color:var(--mu)">Sort</label><select id="sort"><option value="featured"' + (S.sort === 'featured' ? ' selected' : '') + '>Featured</option><option value="low"' + (S.sort === 'low' ? ' selected' : '') + '>Price: low to high</option><option value="high"' + (S.sort === 'high' ? ' selected' : '') + '>Price: high to low</option></select></div></section>' +
+      '<section class="w cmain"><aside class="aside' + (S.filt ? ' open' : '') + '" aria-label="Filters" data-n="4">' +
+      '<fieldset><legend>Price</legend>' + ['Under ₹3,000', '₹3,000 – ₹5,000', '₹5,000 – ₹7,000', 'Over ₹7,000'].map((r, i) => '<label><input type="checkbox" id="pr' + i + '"> ' + r + '</label>').join('') + '</fieldset>' +
+      '<fieldset><legend>Colour</legend><div style="display:flex;flex-wrap:wrap;gap:10px">' + [['Black', '#1C0B12'], ['Bordeaux', '#9E1F45'], ['Gold', '#C9A45C'], ['Tortoise', '#8A5A2B'], ['Steel', '#8E8E93'], ['Green', '#2E7D6B']].map((c) => '<button type="button" class="sw" style="background:' + c[1] + '" aria-label="' + c[0] + '" title="' + c[0] + '"></button>').join('') + '</div></fieldset>' +
+      '<fieldset><legend>Shoe size (UK)</legend><div class="sizes">' + ['6', '7', '8', '9', '10', '11', '12', '13'].map((z) => '<button type="button">' + z + '</button>').join('') + '</div></fieldset></aside>' +
+      '<div class="cgrid g3p" data-n="5">' + cells.join('') + '</div></section>' +
+      '<div class="w" data-n="6" style="display:flex;flex-direction:column;align-items:center;gap:12px;padding-bottom:80px"><span style="font-size:14px;color:var(--mu)">You\'ve seen ' + list.length + ' of ' + list.length + ' pieces</span><span style="width:240px;max-width:100%;height:3px;border-radius:3px;background:var(--bx)"></span><a href="#" class="btn btn-o btn-sm" data-go="home">Back to the edit</a></div>' +
+      footer() + notes();
+  }
+
+  function pdp() {
+    const p = byId(S.pid), v = VAR[p.c];
+    const imgs = [{ img: p.img, alt: p.n + ', product shot' }].concat(LIFE);
+    const look = P.filter((x) => x.c !== p.c).slice(0, 4);
+    const acc = [['Details', v.det], ['Size and fit', v.fit], ['Care', v.care], ['Shipping and returns', 'Free delivery over ₹999. Returns within 15 days with free pickup from your door.']];
+    const liked = !!S.liked[p.id];
+    return header() +
+      '<nav class="w crumb" aria-label="Breadcrumb"><a href="#" data-go="home">Home</a> / <a href="#" data-go="cat" data-v="' + p.c + '">' + p.c + '</a> / ' + p.n + '</nav>' +
+      '<section class="w pdp"><div class="gal" data-n="1"><div class="ph main zoom fu"><img class="' + (S.swap % 2 ? 'swap' : 'swap2') + '" src="' + IMG(imgs[S.gi].img) + '" alt="' + imgs[S.gi].alt + '">' + (p.tag ? '<span class="tag" style="background:var(--bx);color:var(--pa)">' + p.tag + '</span>' : '') + '</div>' +
+      '<div class="thumbs">' + imgs.map((t, i) => '<button type="button" data-act="gi" data-v="' + i + '" aria-pressed="' + (S.gi === i) + '" aria-label="Show ' + t.alt + '"><img src="' + IMG(t.img) + '" alt=""></button>').join('') + '</div></div>' +
+      '<div class="info"><div class="fu d1" style="display:flex;flex-direction:column;gap:8px" data-n="2"><span class="kick">' + p.c + '</span><h1>' + p.n + '</h1><div style="display:flex;gap:12px;align-items:baseline;flex-wrap:wrap"><span class="mono" style="font-size:24px">' + fmt(p.p) + '</span><span style="font-size:13px;color:var(--mu)">Inclusive of all taxes</span></div><p style="margin:0;color:var(--tx2);max-width:48ch">' + v.desc + '</p></div>' +
+      '<div class="vars fu d2" data-n="3"><span style="font-size:14px"><b>' + v.a + '</b> · ' + v.an[S.va] + '</span><div style="display:flex;gap:12px">' + v.an.map((n, i) => '<button type="button" class="swatch" data-act="va" data-v="' + i + '" aria-pressed="' + (S.va === i) + '" aria-label="' + n + '" style="background:' + p.dots[i] + '"></button>').join('') + '</div>' +
+      '<span style="font-size:14px;padding-top:6px"><b>' + v.b + '</b> · ' + v.bn[S.vb] + '</span><div style="display:flex;gap:8px;flex-wrap:wrap">' + v.bn.map((n, i) => '<button type="button" class="chip" data-act="vb" data-v="' + i + '" aria-pressed="' + (S.vb === i) + '">' + n + '</button>').join('') + '</div></div>' +
+      '<div class="buyrow fu d3" data-n="4"><div class="qty"><button type="button" data-act="qty" data-v="-1" aria-label="Decrease quantity">−</button><span aria-live="polite">' + S.qty + '</span><button type="button" data-act="qty" data-v="1" aria-label="Increase quantity">+</button></div><button type="button" class="btn btn-p" data-act="buy" style="flex:1 1 180px">Add to bag · ' + fmt(p.p * S.qty) + '</button><button type="button" class="heart ' + (liked ? popCls() : '') + '" data-act="like" data-v="' + p.id + '" aria-pressed="' + liked + '" aria-label="' + (liked ? 'Remove from wishlist' : 'Save to wishlist') + '" style="position:static;width:52px;height:52px;border:1.5px solid rgba(28,11,18,.25)">' + ic.heart(liked) + '</button></div>' +
+      '<div class="pin fu d4" data-n="5"><label for="pin" style="font-size:14px;font-weight:700">Check delivery</label><div style="display:flex;gap:8px"><input id="pin" inputmode="numeric" maxlength="6" placeholder="Enter pincode" value="' + S.pin + '" style="flex:1"><button type="button" class="btn btn-o btn-sm" data-act="pin" style="border-radius:12px">Check</button></div><span aria-live="polite" style="font-size:14px;color:' + (S.pinOk ? 'var(--ok)' : S.pinTried ? 'var(--bx)' : 'var(--mu)') + '">' + (S.pinOk ? '✓ Delivers in 3–5 days · Free delivery · Cash on delivery available' : S.pinTried ? 'Enter a valid 6-digit pincode.' : 'Enter your 6-digit pincode for a delivery date.') + '</span></div>' +
+      '<div class="acc" data-n="6">' + acc.map((a, i) => '<div><button type="button" data-act="acc" data-v="' + i + '" aria-expanded="' + (S.acc === i) + '"><span>' + a[0] + '</span><span>+</span></button>' + (S.acc === i ? '<p class="swap">' + a[1] + '</p>' : '') + '</div>').join('') + '</div></div></section>' +
+      '<section class="w sec" data-n="7"><h2 class="h2" style="margin-bottom:26px">Complete the <em>look</em></h2><div class="g4">' + look.map(card).join('') + '</div></section>' +
+      '<section class="w sec" data-n="8"><div class="revs"><div><h2 class="serif" style="margin:0 0 6px;font-size:36px;line-height:1">Reviews</h2><span style="color:var(--mu)">No reviews yet. Be the first to tell us how it wears.</span></div><button type="button" class="btn btn-o">Write a review</button></div></section>' +
+      footer() + notes();
+  }
+
+  function totals() {
+    const sub = S.bag.reduce((a, x) => a + byId(x.id).p * x.q, 0);
+    const del = sub >= 999 || sub === 0 ? 0 : 79;
+    const disc = S.applied ? sub * 0.1 : 0;
+    return { sub, del, disc, gift: S.gift ? 99 : 0, total: sub + del - disc + (S.gift ? 99 : 0) };
+  }
+
+  function cart() {
+    const t = totals(), left = Math.max(0, 999 - t.sub);
+    const recs = ['rhapsody', 'riviera', 'brogue', 'heels'].filter((id) => !S.bag.some((x) => x.id === id)).map(byId);
+    return header() +
+      '<section class="w" style="padding-top:40px;padding-bottom:24px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:12px" data-n="1"><h1 class="serif fu" style="margin:0;font-size:clamp(44px,5cqi,68px);line-height:1">Your <em style="color:var(--bx)">bag</em></h1><span style="color:var(--mu)">' + bagCount() + ' items · reserved for 30 minutes</span></section>' +
+      '<section class="w cartm"><div class="lines"><div class="ship fu d1" data-n="2"><span>' + (t.sub === 0 ? 'Add ₹999 or more for free delivery.' : left === 0 ? '✓ You have unlocked free delivery.' : 'Add ' + fmt(left) + ' more for free delivery.') + '</span><span class="track"><i class="bar-i" style="width:' + Math.min(100, Math.round(t.sub / 999 * 100)) + '%"></i></span></div>' +
+      (S.bag.length === 0 ? '<div class="empty swap"><span class="serif" style="font-size:32px">Your bag is empty</span><span style="color:var(--mu)">Friday\'s drop is waiting for you.</span><a href="#" class="btn btn-p" data-go="cat" data-v="All">Shop new in</a></div>' : '') +
+      '<div data-n="3" style="display:flex;flex-direction:column;gap:20px">' + S.bag.map((x) => { const p = byId(x.id); return '<div class="line fu d2"><a href="#" class="ph zoom" data-go="pdp" data-v="' + p.id + '"><img src="' + IMG(p.img) + '" alt="' + p.n + '"></a><div class="d"><span class="cat-l">' + p.c + '</span><a href="#" class="pname" data-go="pdp" data-v="' + p.id + '" style="font-size:22px">' + p.n + '</a><span style="font-size:14px;color:var(--mu)">' + x.v + '</span><div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:auto;padding-top:8px"><div class="qty"><button type="button" data-act="lq" data-v="' + p.id + ':-1" aria-label="Decrease quantity of ' + p.n + '" style="height:40px">−</button><span>' + x.q + '</span><button type="button" data-act="lq" data-v="' + p.id + ':1" aria-label="Increase quantity of ' + p.n + '" style="height:40px">+</button></div><button type="button" class="link" data-act="mv" data-v="' + p.id + '">Move to wishlist</button><button type="button" class="link" data-act="rm" data-v="' + p.id + '" style="color:var(--bx)">Remove</button></div></div><span class="mono" style="font-size:17px">' + fmt(p.p * x.q) + '</span></div>'; }).join('') + '</div></div>' +
+      '<aside class="sum fu d2" aria-label="Order summary" data-n="4"><h2 class="serif" style="margin:0;font-size:30px">Summary</h2><div class="r"><span>Subtotal</span><span class="mono">' + fmt(t.sub) + '</span></div><div class="r"><span>Delivery</span><span class="mono">' + (t.del ? fmt(t.del) : 'Free') + '</span></div>' +
+      (S.applied ? '<div class="r swap" style="color:var(--ok)"><span>GROOVE10 · 10% off</span><span class="mono">−' + fmt(t.disc) + '</span></div>' : '') + (S.gift ? '<div class="r swap"><span>Gift wrap</span><span class="mono">₹99</span></div>' : '') +
+      '<div class="cpn"><label for="cp" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Coupon code</label><input id="cp" placeholder="Try GROOVE10" value="' + S.code + '"><button type="button" class="btn btn-o btn-sm" data-act="code" style="border-radius:12px">Apply</button></div>' +
+      '<span aria-live="polite" style="font-size:13px;color:' + (!S.tried ? 'var(--mu)' : S.applied ? 'var(--ok)' : 'var(--bx)') + '">' + (!S.tried ? 'Have a code? Apply it here.' : S.applied ? '✓ GROOVE10 applied. You save 10%.' : 'That code is not valid. Check the spelling and try again.') + '</span>' +
+      '<label style="display:flex;gap:10px;align-items:center;font-size:15px;cursor:pointer"><input type="checkbox" id="gift"' + (S.gift ? ' checked' : '') + ' style="width:18px;height:18px;accent-color:var(--bx)"> Gift wrap with a handwritten note (₹99)</label>' +
+      '<div class="r" style="border-top:1px solid var(--ln);padding-top:16px;align-items:baseline"><b style="font-size:18px">Total</b><span class="mono" style="font-size:24px">' + fmt(t.total) + '</span></div>' +
+      '<a href="#" class="btn btn-p" data-go="checkout" style="font-size:16px;padding:17px 24px">Checkout securely</a><span style="font-size:12px;color:var(--mu);text-align:center">UPI · Cards · Netbanking · Cash on delivery</span></aside></section>' +
+      (recs.length ? '<section class="w sec" data-n="5"><h2 class="h2" style="margin-bottom:26px">You may also <em>like</em></h2><div class="g4">' + recs.map(card).join('') + '</div></section>' : '') +
+      footer() + notes();
+  }
+
+  function checkout() {
+    const t = totals();
+    const ships = [['Standard', 'Arrives in 3–5 days', 0], ['Express', 'Arrives in 1–2 days in metro cities', 149]];
+    const pays = [['UPI', 'Google Pay, PhonePe, Paytm or any UPI app', 'FASTEST'], ['Credit or debit card', 'Visa, Mastercard, RuPay', ''], ['Netbanking', 'All major Indian banks', ''], ['Cash on delivery', 'Pay in cash or UPI at your door', '']];
+    const total = t.total + ships[S.ship][2];
+    const hdr = '<header class="cohdr" data-n="1"><div class="w"><a href="#" data-go="home" aria-label="Jazz94 home" style="line-height:0">' + logo(false, 162) + '</a><span style="display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ok)">' + ic.lock + 'Secure checkout</span></div></header>';
+    const foot = '<footer style="border-top:1px solid var(--ln)"><div class="w" style="max-width:1180px;padding-top:22px;padding-bottom:22px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;font-size:13px;color:var(--mu)"><span>Help · Returns policy · Privacy</span><span>Payments are encrypted and secure</span></div></footer>';
+    if (S.placed) {
+      return hdr + '<section class="done"><svg class="fu" width="96" height="96" viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="46" fill="#9E1F45"/><path class="check" d="M30 49l12 12 24-26" fill="none" stroke="#FFFBFA" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="kick fu d1">Order J94-10482</span><h1 class="serif fu d1" style="margin:0;font-size:clamp(44px,6cqi,72px);line-height:1">You\'re in the <em style="color:var(--bx)">groove.</em></h1><p class="fu d2" style="margin:0;color:var(--tx2);max-width:44ch">Your order is placed. We\'ve sent the details to your phone and will message you when it ships.</p><div class="fu d3" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><a href="#" class="btn btn-p" data-go="home">Continue shopping</a><button type="button" class="btn btn-o" data-act="unplace">Back to checkout</button></div></section>' + foot;
+    }
+    const fields = [['Mobile number', 'tel', 'tel', '10-digit mobile number'], ['Email', 'email', 'email', 'For your receipt'], ['Full name', 'text', 'name', 'As on your ID'], ['Pincode', 'text', 'postal-code', '6 digits'], ['Flat, house, building', 'text', 'address-line1', ''], ['Area, street, landmark', 'text', 'address-line2', ''], ['City', 'text', 'address-level2', 'Fills from pincode'], ['State', 'text', 'address-level1', 'Fills from pincode']];
+    return hdr +
+      '<div class="w steps" style="max-width:1180px" data-n="2"><span class="on">1 · Address</span><i></i><span>2 · Delivery</span><i></i><span>3 · Payment</span></div>' +
+      '<section class="w co" style="max-width:1180px"><form onsubmit="return false">' +
+      '<fieldset class="fu" data-n="3"><legend>Where should we deliver?</legend><div class="fields">' + fields.map((f, i) => '<label class="field" for="f' + i + '">' + f[0] + '<input id="f' + i + '" type="' + f[1] + '" autocomplete="' + f[2] + '" placeholder="' + f[3] + '"></label>').join('') + '</div><label style="display:flex;gap:10px;align-items:center;font-size:14px"><input type="checkbox" checked style="width:18px;height:18px;accent-color:var(--bx)"> Send order updates on WhatsApp</label></fieldset>' +
+      '<fieldset class="fu d1" data-n="4"><legend>Delivery speed</legend>' + ships.map((d, i) => '<div class="opt" data-on="' + (S.ship === i ? 1 : 0) + '"><button type="button" data-act="ship" data-v="' + i + '" aria-pressed="' + (S.ship === i) + '"><span style="display:flex;align-items:center;gap:14px"><span class="radio"><i></i></span><span style="display:flex;flex-direction:column"><b>' + d[0] + '</b><span style="font-size:14px;color:var(--mu)">' + d[1] + '</span></span></span><span class="mono">' + (d[2] ? fmt(d[2]) : 'Free') + '</span></button></div>').join('') + '</fieldset>' +
+      '<fieldset class="fu d2" data-n="5"><legend>Payment</legend>' + pays.map((p, i) => '<div class="opt" data-on="' + (S.pay === i ? 1 : 0) + '"><button type="button" data-act="pay" data-v="' + i + '" aria-pressed="' + (S.pay === i) + '"><span style="display:flex;align-items:center;gap:14px"><span class="radio"><i></i></span><span style="display:flex;flex-direction:column"><b>' + p[0] + '</b><span style="font-size:14px;color:var(--mu)">' + p[1] + '</span></span></span><span style="font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--bx)">' + p[2] + '</span></button>' + (S.pay === 0 && i === 0 ? '<div class="swap" style="padding:0 18px 18px 52px;display:flex;gap:8px;flex-wrap:wrap"><label for="upi" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">UPI ID</label><input id="upi" placeholder="yourname@upi" style="flex:1 1 200px;min-width:0;padding:12px 14px;border:1.5px solid rgba(28,11,18,.2);border-radius:12px;font:inherit;background:#fff;color:var(--ink)"><span style="font-size:13px;color:var(--mu);align-self:center">Or scan a QR code on the next step</span></div>' : '') + '</div>').join('') + '</fieldset>' +
+      '<div style="display:flex;flex-direction:column;gap:10px" data-n="6"><button type="button" class="btn btn-p" data-act="place" style="font-size:17px;padding:19px 28px"' + (S.bag.length ? '' : ' disabled') + '>Place order · ' + fmt(total) + '</button><span style="font-size:13px;color:var(--mu);text-align:center">By placing this order you agree to our Terms and Returns policy.</span></div></form>' +
+      '<aside class="osum fu d1" aria-label="Order summary" data-n="7"><h2 class="serif" style="margin:0;font-size:28px">Your order</h2>' +
+      S.bag.map((x) => { const p = byId(x.id); return '<div style="display:flex;gap:14px;align-items:center"><span style="position:relative;flex:none"><span class="ph" style="display:block;width:64px;height:76px;border-radius:14px"><img src="' + IMG(p.img) + '" alt="' + p.n + '"></span><span style="position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--pa);font-size:12px;display:grid;place-items:center">' + x.q + '</span></span><span style="flex:1;min-width:0;display:flex;flex-direction:column"><b style="font-weight:500">' + p.n + '</b><span style="font-size:13px;color:var(--mu)">' + x.v + '</span></span><span class="mono" style="font-size:14px">' + fmt(p.p * x.q) + '</span></div>'; }).join('') +
+      '<div style="border-top:1px solid rgba(28,11,18,.15);padding-top:14px;display:flex;flex-direction:column;gap:8px;font-size:15px"><div style="display:flex;justify-content:space-between"><span>Subtotal</span><span class="mono">' + fmt(t.sub) + '</span></div>' + (S.applied ? '<div style="display:flex;justify-content:space-between;color:var(--ok)"><span>GROOVE10</span><span class="mono">−' + fmt(t.disc) + '</span></div>' : '') + (S.gift ? '<div style="display:flex;justify-content:space-between"><span>Gift wrap</span><span class="mono">₹99</span></div>' : '') + '<div style="display:flex;justify-content:space-between"><span>Delivery</span><span class="mono">' + (ships[S.ship][2] ? fmt(ships[S.ship][2]) : (t.del ? fmt(t.del) : 'Free')) + '</span></div><div style="display:flex;justify-content:space-between;align-items:baseline;padding-top:8px"><b style="font-size:18px">Total</b><span class="mono" style="font-size:22px">' + fmt(total) + '</span></div></div><a href="#" data-go="cart" style="font-size:14px">Edit bag</a></aside></section>' +
+      foot + notes();
+  }
+
+  /* ---------- overlay ---------- */
+  function overlay() {
+    let h = '';
+    if (S.menu) {
+      const cats = [['Sunglasses', 'Sunglasses', 'From ₹1,999'], ['Watches', 'Watches', 'From ₹3,999'], ['Shoes', 'Shoes', 'From ₹2,999'], ['New In', 'All', '10 pieces'], ['Gifts', 'All', 'Ready to wrap'], ['Sale', 'All', 'Up to 30% off']];
+      h += '<div class="scrim" data-act="menu"></div><div class="drawer" role="dialog" aria-modal="true" aria-label="Menu"><div class="top">' + logo(false).replace('<svg ', '<svg class="lg" ') + '<button type="button" class="ib" data-act="menu" aria-label="Close menu">' + ic.close + '</button></div>' +
+        '<nav aria-label="Shop">' + cats.map((c) => '<a href="#" data-go="cat" data-v="' + c[1] + '"' + (c[0] === 'Sale' ? ' style="color:var(--bx)"' : '') + '><span>' + c[0] + '</span><small>' + c[2] + '</small></a>').join('') + '</nav>' +
+        '<div class="util"><a href="#">' + ic.user + 'Sign in or create account</a><a href="#">' + ic.heart(false) + 'Wishlist</a><a href="#">' + ic.box + 'Track order</a><a href="#">' + ic.help + 'Help and returns</a></div>' +
+        '<div class="promo-d"><span class="kick" style="color:var(--ch)">The Club</span><b class="serif" style="font-size:22px;font-weight:400">Early access to Friday drops</b><a href="#" data-go="home" class="btn btn-c btn-sm" style="align-self:flex-start">Join free</a></div></div>';
+    }
+    if (S.toast) h += '<div class="toast" role="status"><span>Added to bag · <b>' + S.toast + '</b></span><a href="#" data-go="cart">View bag</a></div>';
+    return h;
+  }
+
+  
+  /* ---------- Option: blue + lime sport home ---------- */
+  function logoSp() {
+    return '<svg viewBox="0 0 362 106" role="img" aria-label="Jazz94"><rect x="2" y="2" width="100" height="100" rx="26" style="fill:var(--lm)"/><text x="41" y="57" font-family="\'DM Serif Display\', Georgia, serif" font-size="70" fill="#0B1020" text-anchor="middle" dominant-baseline="central">J</text><text x="79" y="30" font-family="\'DM Serif Display\', Georgia, serif" font-size="21" fill="#1534C8" text-anchor="middle" dominant-baseline="central">94</text><text x="126" y="54" font-family="\'DM Sans\', sans-serif" font-weight="500" font-size="40" fill="#FFFFFF" letter-spacing="9">JAZZ94</text><text x="128" y="78" font-family="\'DM Sans\', sans-serif" font-weight="500" font-size="10" style="fill:var(--lmt)" letter-spacing="4.5">SHADES · WATCHES · KICKS</text></svg>';
+  }
+  function sport() {
+    const arr = ['bebop', 'midnight', 'skate', 'rhapsody'].map(byId);
+    const tiles = [['Sunglasses', 'From ₹1,999', 'sp-shades', 'Man in sunglasses against a brick wall'], ['Watches', 'From ₹3,999', 'sp-watch', 'Watch on a suit sleeve'], ['Shoes', 'From ₹2,999', 'sp-run', 'Runner mid-stride on the road']];
+    const why = [['Free delivery', 'On every order over ₹999', svc[0].i], ['15-day returns', 'Free pickup from your door', svc[1].i], ['Cash on delivery', 'Pay when it arrives', svc[2].i], ['Gift-ready', 'Every order in a keepsake box', svc[3].i]];
+    return '<div class="sp-ann">FREE DELIVERY OVER ₹999 · 15-DAY RETURNS · NEW DROP EVERY FRIDAY</div>' +
+      '<section class="sp-hero"><header class="w sp-hdr"><button type="button" class="ib sp-hamb" aria-label="Open menu">' + ic.menu + '</button><a href="#" class="sp-logo" aria-label="Jazz94 home">' + logoSp() + '</a><nav aria-label="Main"><a href="#">New &amp; Drops</a><a href="#">Sunglasses</a><a href="#">Watches</a><a href="#">Shoes</a><a href="#">Gifts</a><a href="#" style="color:var(--lmt)">Sale</a></nav><div class="sp-icons"><button type="button" class="ib hide-m" aria-label="Search">' + ic.search + '</button><button type="button" class="ib hide-m" aria-label="Wishlist">' + ic.heart(false) + '</button><a href="#" class="ib" aria-label="Bag, 2 items">' + ic.bag + '<span class="bagn">2</span></a></div></header>' +
+      '<div class="w sp-in"><div class="sp-photo"><img src="img/sp-hero.jpg" alt="Runner in teal leggings sprinting up concrete stairs"></div>' +
+      '<div class="sp-copy"><span class="sp-eye">DROP 07 · SUMMER \'94</span><h1><span>Wear the</span><span class="l2">groove.</span></h1><i class="sp-speed" aria-hidden="true"></i><p>Shades, watches and kicks built to move with you. A new drop every Friday.</p><div class="sp-ctas"><a href="#" class="sp-btn">Shop the drop ' + ic.arrow + '</a><a href="#" class="sp-btn-o">Explore watches</a></div></div>' +
+      '<a href="#" class="sp-tag"><em>NEW</em><img src="img/sun-round.jpg" alt=""><span style="display:flex;flex-direction:column;gap:4px"><b>Bebop Round</b><span>₹2,499</span></span></a></div>' +
+      '<ol class="sp-count" aria-label="Slide 1 of 3"><li class="on">01</li><li>02</li><li>03</li></ol></section>' +
+      '<section class="sp-new"><div class="w"><div class="sp-side"><h2 class="sp-h2">New<br>arrivals</h2><i class="sp-speed" aria-hidden="true"></i><p>Built to move. Made to be seen.</p><a href="#" class="sp-all">SHOP ALL ' + ic.arrow + '</a></div><div class="sp-cards">' +
+      arr.map((p, i) => '<a href="#" class="sp-card"><span class="im"><img src="' + IMG(p.img) + '" alt="' + p.n + '" loading="lazy">' + (i < 2 ? '<span class="sp-badge">NEW</span>' : '') + '</span><span class="tx"><b>' + p.n + '</b><small>' + p.c + '</small><span class="row"><span>' + fmt(p.p) + '</span><span class="sp-heart">' + ic.heart(false) + '</span></span></span></a>').join('') +
+      '<span class="sp-next" aria-hidden="true">' + ic.arrow + '</span></div></div></section>' +
+      '<section class="sp-cat"><div class="w"><h2 class="sp-h2">Shop by category</h2><div class="sp-tiles">' +
+      tiles.map((t) => '<a href="#" class="sp-tile"><img src="img/' + t[2] + '.jpg" alt="' + t[3] + '" loading="lazy"><span class="lb"><span><small>' + t[1] + '</small><b>' + t[0] + '</b></span><span class="sp-go">' + ic.arrow + '</span></span></a>').join('') + '</div></div></section>' +
+      '<section class="sp-drop"><div class="w"><div class="tx"><span class="sp-eye">FRIDAY DROP · 8 PM</span><h2 class="sp-h2" style="color:#FFFFFF">Midnight Set<br><span style="color:var(--bl)">drops in</span></h2><div class="sp-timer" aria-label="2 days 14 hours 36 minutes"><div><b>02</b><small>DAYS</small></div><div><b>14</b><small>HRS</small></div><div><b>36</b><small>MIN</small></div></div><div class="sp-ctas"><a href="#" class="sp-btn">Notify me</a></div></div><div class="ph2"><img src="img/sp-night.jpg" alt="Three runners silhouetted against a blue sky" loading="lazy"></div></div></section>' +
+      '<section class="sp-why"><div class="w">' + why.map((x) => '<div class="it"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="' + x[2] + '"/></svg></span><span><b>' + x[0] + '</b><span>' + x[1] + '</span></span></div>').join('') + '</div></section>' +
+      '<section class="sp-club"><div class="w"><h2 class="sp-h2">Join the club.<br><span style="color:var(--b)">Never miss a drop.</span></h2><form onsubmit="return false"><label for="spem" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Email address</label><input id="spem" type="email" placeholder="Your email address"><button type="button" class="sp-btn">Join</button></form></div></section>' +
+      '<footer class="sp-foot"><div class="w"><div><a href="#" class="sp-logo" style="display:block;margin-bottom:14px">' + logoSp() + '</a><span>Shades, watches and kicks built to move.</span></div>' +
+      [['Shop', ['New & Drops', 'Sunglasses', 'Watches', 'Shoes', 'Gift cards']], ['Help', ['Track order', 'Shipping', 'Returns', 'Size guide']], ['About', ['Our story', 'Stores', 'Careers']], ['Follow', ['Instagram', 'YouTube', 'Strava club']]].map((c) => '<div><h4>' + c[0] + '</h4>' + c[1].map((l) => '<a href="#">' + l + '</a>').join('') + '</div>').join('') + '</div></footer>';
+  }
+
+
+  /* ---------- Option: Bordeaux + energy ---------- */
+  function energy() {
+    let base = home();
+    const h0 = base.indexOf('<header class="hdr"'), h1 = base.indexOf('</header>') + 9;
+    const ovHdr = base.slice(h0, h1).replace('<header class="hdr"', '<header class="hdr hdr-ov"').replace(logo(false), logo(true));
+    base = base.slice(0, h0) + base.slice(h1);
+    const a = base.indexOf('<section class="w hero" data-n="3">'), b = base.indexOf('<section class="w sec" data-n="4">');
+    const hero = '<section class="en-full">' + ovHdr + '<div class="bg"><img class="kb" src="' + IMG('hero') + '" alt="Model in a bordeaux coat and sunglasses carrying shopping bags"></div><div class="w en-in"><div class="en-copy">' +
+      '<span class="en-eye"><i class="en-dot" aria-hidden="true"></i>Drop 07 · The Summer \'94 Edit</span>' +
+      '<h1 class="en-h1"><span>Wear the</span><em>groove.</em></h1><i class="en-speed" aria-hidden="true"></i>' +
+      '<p class="fu d2">Statement shades, steel watches and sneakers made to move. Fresh pieces drop every Friday at 8 pm.</p>' +
+      '<div class="fu d3" style="display:flex;flex-wrap:wrap;gap:12px"><a href="#" class="btn btn-p" style="font-size:16px;padding:17px 32px">Shop the drop ' + ic.arrow + '</a><a href="#" class="btn btn-o" style="font-size:16px;padding:15.5px 30px">Explore watches</a></div>' +
+      '<div class="trust fu d4"><span>✦ Free delivery over ₹999</span><span>✦ 15-day easy returns</span><span>✦ Cash on delivery</span></div></div></div>' +
+      '<svg class="badge-spin" viewBox="0 0 124 124" role="img" aria-label="New drop every Friday"><defs><path id="ring2" d="M62 62 m-46 0 a46 46 0 1 1 92 0 a46 46 0 1 1 -92 0"/></defs><circle cx="62" cy="62" r="60" fill="#9E1F45"/><text font-family="\'DM Sans\', sans-serif" font-size="11" font-weight="700" letter-spacing="3" fill="#FFFBFA"><textPath href="#ring2" textLength="284" lengthAdjust="spacing">NEW DROP · EVERY FRIDAY ·</textPath></text><text x="62" y="70" text-anchor="middle" font-family="\'DM Serif Display\', Georgia, serif" font-size="26" fill="#E9D3A6">94</text></svg>' +
+      '<a href="#" class="chipcard"><span class="ph"><img src="' + IMG('sun-round') + '" alt=""></span><span style="display:flex;flex-direction:column;line-height:1.25;color:var(--ink)"><b class="serif" style="font-size:17px">Bebop Round</b><span class="mono" style="font-size:13px;color:var(--bx)">₹2,499</span></span></a>' +
+      '<ol class="en-count" aria-label="Slide 1 of 3"><li class="on">01</li><li>02</li><li>03</li></ol></section>' +
+      '<div class="en-band" aria-hidden="true"><div class="marq">' + ['Wear the groove', 'New drop every Friday', 'Shades · Watches · Kicks', 'Wear the groove', 'New drop every Friday', 'Shades · Watches · Kicks'].map((t) => '<span>' + t + '</span><span class="s">✦</span>').join('') + '</div></div><div style="height:72px"></div>';
+    let out = base.slice(0, a) + hero + base.slice(b);
+    const drop = '<section class="w sec"><div class="en-drop"><div class="tx"><span class="kick" style="color:var(--ch)">Friday drop · 8 pm</span><h2 class="h2" style="color:var(--pa);font-size:clamp(44px,5cqi,72px)">Midnight Set<br><em style="color:var(--ch)">drops in</em></h2><div class="en-timer" aria-label="2 days 14 hours 36 minutes"><div><b>02</b><small>DAYS</small></div><div><b>14</b><small>HRS</small></div><div><b>36</b><small>MIN</small></div></div><div style="display:flex;gap:12px;flex-wrap:wrap"><a href="#" class="btn btn-c" style="align-self:flex-start">Notify me</a><a href="#" class="btn" style="border-color:rgba(255,251,250,.5);color:var(--pa)">See the watch</a></div></div><div class="ph zoom"><img src="' + IMG('watch-red') + '" alt="Midnight Set Watch on a red book" loading="lazy"></div></div></section>';
+    const c = out.indexOf('<section class="w sec" data-n="6">');
+    out = out.slice(0, c) + drop + out.slice(c);
+    return out;
+  }
+
+  /* ---------- compare canvas ---------- */
+  Object.assign(S, { lv: 3, page: 'home', tab: 'All', menu: false, toast: null });
+  const cur = home();
+  const sp = sport();
+  const frame = (title, sub, w, cls, inner) => '<div class="fr"><div class="fl">' + title + ' <span>· ' + sub + '</span></div><div class="fb ' + cls + '" style="width:' + w + 'px">' + inner + '</div></div>';
+  const curD = '<div class="site lv3 enter">' + cur + '</div>', spD = '<div class="sp enter">' + sp + '</div>';
+  const enD = '<div class="site lv3 en enter">' + energy() + '</div>';
+  const world = $('world'), vp = $('vp');
+  world.innerHTML =
+    '<section class="crow" id="rowD">' + frame('Current L3', 'Bordeaux Champagne · desktop', 1440, '', curD) + frame('Recommended', 'Bordeaux + energy · desktop', 1440, '', enD) + frame('Option', '<b id="accN1">Blue + Orange</b> · desktop', 1440, '', spD) + '</section>' +
+    '<section class="crow" id="rowM">' + frame('Current L3', 'mobile', 390, 'mob', curD) + frame('Recommended', 'Bordeaux + energy · mobile', 390, 'mob', enD) + frame('Option', '<b id="accN2">Blue + Orange</b> · mobile', 390, 'mob', spD) + '</section>';
+  world.addEventListener('click', (e) => e.preventDefault());
+
+  let k = 0.4, tx = 0, ty = 0;
+  const apply = () => { world.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + k + ')'; $('zv').textContent = Math.round(k * 100) + '%'; };
+  const clampK = (v) => Math.max(0.03, Math.min(1.5, v));
+  function zoomAt(nk, px, py) { nk = clampK(nk); tx = px - (px - tx) * (nk / k); ty = py - (py - ty) * (nk / k); k = nk; apply(); }
+  function showRow(id) {
+    const row = $(id);
+    k = clampK((vp.clientWidth - 32) / (row.offsetWidth + 40));
+    if (id === 'rowM') k = clampK(Math.min(k, 0.9));
+    tx = 16 - (row.offsetLeft - 20) * k; ty = 16 - (row.offsetTop - 20) * k; apply();
+  }
+  function fitAll() { const W = world.scrollWidth, H = world.scrollHeight; k = clampK(Math.min(vp.clientWidth / W, vp.clientHeight / H) * 0.96); tx = (vp.clientWidth - W * k) / 2; ty = (vp.clientHeight - H * k) / 2; apply(); }
+  vp.addEventListener('wheel', (e) => { e.preventDefault(); const r = vp.getBoundingClientRect(); if (e.ctrlKey || e.metaKey) zoomAt(k * Math.exp(-e.deltaY * 0.01), e.clientX - r.left, e.clientY - r.top); else { tx -= e.deltaX; ty -= e.deltaY; apply(); } }, { passive: false });
+  const pts = new Map(); let last = null;
+  vp.addEventListener('pointerdown', (e) => { vp.setPointerCapture(e.pointerId); pts.set(e.pointerId, { x: e.clientX, y: e.clientY }); vp.classList.add('drag'); last = null; });
+  vp.addEventListener('pointermove', (e) => {
+    if (!pts.has(e.pointerId)) return;
+    const prev = pts.get(e.pointerId); pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pts.size === 1) { tx += e.clientX - prev.x; ty += e.clientY - prev.y; apply(); }
+    else if (pts.size === 2) { const [a, b] = [...pts.values()]; const r = vp.getBoundingClientRect(); const dist = Math.hypot(a.x - b.x, a.y - b.y), mx = (a.x + b.x) / 2 - r.left, my = (a.y + b.y) / 2 - r.top; if (last) { tx += mx - last.mx; ty += my - last.my; zoomAt(k * dist / last.dist, mx, my); } last = { dist, mx, my }; }
+  });
+  const up = (e) => { pts.delete(e.pointerId); last = null; if (!pts.size) vp.classList.remove('drag'); };
+  vp.addEventListener('pointerup', up); vp.addEventListener('pointercancel', up);
+  const center = () => [vp.clientWidth / 2, vp.clientHeight / 2];
+  $('zin').onclick = () => zoomAt(k * 1.25, ...center());
+  $('zout').onclick = () => zoomAt(k / 1.25, ...center());
+  $('fit').onclick = fitAll;
+  $('bD').onclick = () => showRow('rowD');
+  $('bM').onclick = () => showRow('rowM');
+  document.addEventListener('keydown', (e) => { if (e.key === '+' || e.key === '=') zoomAt(k * 1.25, ...center()); else if (e.key === '-') zoomAt(k / 1.25, ...center()); else if (e.key === '0') fitAll(); });
+  const ACC = [
+    ['orange', 'Sunset orange', '#FF7A1A', '#FFB27A'],
+    ['champagne', 'Champagne', '#E9D3A6', '#E9D3A6'],
+    ['coral', 'Coral pink', '#FF5C8A', '#FFA3BD'],
+    ['yellow', 'Sunshine yellow', '#FFD23F', '#FFD23F'],
+    ['aqua', 'Aqua', '#2EE6C9', '#2EE6C9'],
+    ['lime', 'Lime', '#C6F432', '#C6F432']
+  ];
+  let accId = 'orange';
+  try { accId = localStorage.getItem('jazz94-acc') || 'orange'; } catch (e) {}
+  function setAcc(id) {
+    const a = ACC.find((x) => x[0] === id) || ACC[0];
+    accId = a[0];
+    world.style.setProperty('--acc', a[2]); world.style.setProperty('--acct', a[3]);
+    $('accN1').textContent = 'Blue + ' + a[1]; $('accN2').textContent = 'Blue + ' + a[1];
+    $('accs').innerHTML = ACC.map((x) => '<button type="button" data-a="' + x[0] + '" aria-pressed="' + (x[0] === accId) + '"><i style="background:' + x[2] + '"></i>' + x[1] + '</button>').join('');
+    try { localStorage.setItem('jazz94-acc', accId); } catch (e) {}
+  }
+  $('accs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) setAcc(b.dataset.a); });
+  setAcc(accId);
+  showRow('rowD');
+  setTimeout(() => world.querySelectorAll('.enter').forEach((n) => n.classList.remove('enter')), 2600);
+})();
+</script>
+
+</body>
+</html>

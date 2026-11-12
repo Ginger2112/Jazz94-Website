@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>html,body{margin:0}</style>
+</head>
+<body>
+<title>Jazz94 Colour and Type</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;700&family=Archivo:wdth,wght@62..125,400..800&family=Bodoni+Moda:opsz,wght@6..96,400..900&family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&family=Fraunces:opsz,wght,SOFT,WONK@9..144,400..900,0..100,0..1&family=Gloock&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@400;500;700&family=Jost:wght@400;500;700&family=Limelight&family=Outfit:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;700&family=Shrikhand&family=Syne:wght@700;800&family=Urbanist:wght@400;500;700&display=swap">
+<style>
+/* Layout: locked logo on top with a live brand board, then palette cards four across, font cards two across, a storefront check and a copy-back panel. Neutral chrome so the brand options carry the colour. */
+:root {
+  --bg: #F4F4F7;
+  --surface: #FFFFFF;
+  --fg: #19171F;
+  --muted: #5F5C6C;
+  --line: #E2E1E9;
+  --accent: #2C3DF5;
+  --accent-soft: #E7E9FF;
+  --on-accent: #FFFFFF;
+  --pass: #0E7C4A;
+  --warn: #A35A00;
+  --font-ui: "Hanken Grotesk", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --radius: 16px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121117; --surface: #1C1B23; --fg: #F1F0F6; --muted: #A4A1B3; --line: #2F2D3A;
+    --accent: #8F99FF; --accent-soft: #262A52; --on-accent: #121117; --pass: #5BD39A; --warn: #F2B45A;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121117; --surface: #1C1B23; --fg: #F1F0F6; --muted: #A4A1B3; --line: #2F2D3A;
+  --accent: #8F99FF; --accent-soft: #262A52; --on-accent: #121117; --pass: #5BD39A; --warn: #F2B45A;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-ui); font-size: 15px; line-height: 1.55; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+.wrap {
+  max-width: 1220px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+h1, h2, h3 { text-wrap: balance; margin: 0; line-height: 1.15; }
+p { margin: 0; }
+.eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+
+/* Picks bar */
+.picks-bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9; background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.picks-bar .wrap { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-block: 10px; }
+.picks-bar .brand { font-weight: 700; margin-right: auto; display: flex; align-items: center; gap: 10px; }
+.picks-bar .brand svg { height: 30px; width: auto; display: block; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { font-size: 12.5px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); white-space: nowrap; }
+.chip b { font-weight: 600; color: var(--muted); margin-right: 4px; }
+button { font: inherit; cursor: pointer; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); padding: 8px 14px; font-weight: 600; }
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+button:focus-visible, .opt:focus-within { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* Intro */
+header.intro { padding-block: 40px 4px; }
+header.intro .wrap { display: grid; gap: 16px; }
+header.intro h1 { font-size: clamp(30px, 5vw, 46px); font-weight: 700; letter-spacing: -.02em; }
+header.intro .lede { color: var(--muted); max-width: 64ch; font-size: 16.5px; }
+.steps { display: flex; gap: 8px; flex-wrap: wrap; list-style: none; padding: 0; margin: 0; counter-reset: s; }
+.steps li { counter-increment: s; font-size: 13px; padding: 6px 12px 6px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); display: flex; align-items: center; gap: 8px; }
+.steps li::before { content: counter(s); width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 700; background: var(--line); color: var(--fg); }
+.steps li.done { color: var(--fg); }
+.steps li.done::before { content: "✓"; background: var(--pass); color: var(--surface); }
+.steps li.now { border-color: var(--accent); color: var(--fg); }
+.steps li.now::before { background: var(--accent); color: var(--on-accent); }
+
+/* Brand board */
+.board { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 10px; }
+.board > *, section.block > .wrap > * { min-width: 0; }
+.b-main > svg { min-width: 0; }
+@media (max-width: 860px) { .board { grid-template-columns: 1fr; } }
+.b-main { border-radius: 18px; display: grid; place-items: center; grid-template-columns: minmax(0, 1fr); padding: 34px 40px; min-height: 260px; box-shadow: inset 0 0 0 1px var(--line); }
+.b-main svg { width: 100%; max-width: 560px; height: auto; display: block; }
+.b-side { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.b-tile { border-radius: 18px; display: grid; place-items: center; aspect-ratio: 1; max-width: 100%; padding: 22%; }
+.b-tile svg { width: 100%; height: 100%; display: block; }
+.b-tag { border-radius: 18px; padding: 16px; display: grid; align-content: space-between; gap: 10px; aspect-ratio: 1; max-width: 100%; position: relative; }
+.b-tag::before { content: ""; position: absolute; top: 12px; right: 12px; width: 12px; height: 12px; border-radius: 50%; box-shadow: inset 0 0 0 2px currentColor; opacity: .5; }
+.b-tag .ic { width: 38px; height: 38px; }
+.b-tag .ic svg { width: 100%; height: 100%; display: block; }
+.b-tag .pn { font-size: 13px; font-weight: 600; line-height: 1.3; }
+.b-tag .pr { font-family: var(--font-mono); font-size: 14px; font-variant-numeric: tabular-nums; }
+.b-btn { border-radius: 18px; padding: 16px; display: grid; align-content: center; gap: 10px; aspect-ratio: 1; max-width: 100%; }
+.b-btn span { border-radius: 999px; padding: 10px 14px; font-weight: 700; font-size: 13.5px; text-align: center; }
+.b-strip { grid-column: 1 / -1; display: grid; grid-template-columns: 2fr 1.5fr 1fr 1fr 1fr; border-radius: 14px; overflow: hidden; min-height: 64px; box-shadow: inset 0 0 0 1px var(--line); }
+.b-strip div { padding: 10px 12px; font-size: 12px; display: flex; flex-direction: column; justify-content: flex-end; min-width: 0; }
+.b-strip span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.b-strip .hex { font-family: var(--font-mono); font-size: 11px; opacity: .85; }
+@media (max-width: 560px) { .b-strip { grid-template-columns: repeat(5, minmax(0, 1fr)); } .b-strip span:first-child { display: none; } }
+.b-type { grid-column: 1 / -1; border-radius: 18px; padding: 28px 32px; display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 24px; align-items: end; box-shadow: inset 0 0 0 1px var(--line); }
+@media (max-width: 760px) { .b-type { grid-template-columns: 1fr; padding: 22px; } }
+.b-type .hl { font-size: clamp(40px, 6vw, 72px); line-height: .98; overflow-wrap: anywhere; }
+.b-type .cp { display: grid; gap: 8px; }
+.b-type .cp .k { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; opacity: .7; }
+.b-type .cp p { font-size: 15px; line-height: 1.6; }
+
+/* Sections */
+section.block { padding-block: 40px 8px; }
+section.block > .wrap { display: grid; gap: 18px; }
+.sec-head { display: grid; gap: 6px; }
+.sec-head h2 { font-size: 26px; font-weight: 700; letter-spacing: -.01em; }
+.sec-head p { color: var(--muted); max-width: 72ch; }
+.grid4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 1100px) { .grid4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .grid4 { grid-template-columns: 1fr; } }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 860px) { .grid2 { grid-template-columns: 1fr; } }
+
+.opt { position: relative; display: grid; gap: 14px; align-content: start; background: var(--surface); border: 2px solid var(--line); border-radius: var(--radius); padding: 16px; cursor: pointer; transition: border-color .15s; min-width: 0; }
+.opt:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.opt input { position: absolute; opacity: 0; pointer-events: none; }
+.opt.is-selected { border-color: var(--accent); }
+.opt-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.opt-top h3 { font-size: 17px; font-weight: 700; }
+.opt-top .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.tag { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 3px 8px; border-radius: 6px; white-space: nowrap; }
+.tag.rec { background: var(--accent-soft); color: var(--accent); }
+.tag.sel { background: var(--accent); color: var(--on-accent); }
+.tag.new { background: var(--fg); color: var(--bg); }
+.opt:not(.is-selected) .tag.sel { display: none; }
+.opt .idea { color: var(--muted); font-size: 14px; }
+.num { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+
+/* Palette card */
+.p-icons { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.p-icons div { border-radius: 12px; aspect-ratio: 1; display: grid; place-items: center; padding: 18%; max-width: 100%; }
+.p-icons svg { width: 100%; height: 100%; display: block; }
+.swatches { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 64px 52px 40px; gap: 3px; border-radius: 10px; overflow: hidden; }
+.sw { padding: 6px 9px; display: flex; flex-direction: column; justify-content: flex-end; font-size: 11.5px; line-height: 1.25; min-width: 0; }
+.sw span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sw .hex { font-family: var(--font-mono); font-size: 10.5px; opacity: .85; }
+.sw.s-primary { grid-column: 1 / -1; }
+.sw.s-paper { box-shadow: inset 0 0 0 1px var(--line); }
+.checks { display: grid; gap: 3px; font-size: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
+.checks div { display: flex; justify-content: space-between; gap: 8px; }
+.checks .r { color: var(--muted); }
+.ratio { font-family: var(--font-mono); font-size: 11px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pass { color: var(--pass); }
+.warn { color: var(--warn); }
+
+/* Font card */
+.f-lock { border-radius: 12px; display: grid; place-items: center; padding: 22px 26px; aspect-ratio: 16 / 6; max-width: 100%; box-shadow: inset 0 0 0 1px var(--line); }
+.f-lock svg { width: 100%; height: 100%; display: block; }
+.spec { border-radius: 12px; padding: 18px; display: grid; gap: 10px; background: var(--bg); min-width: 0; }
+.spec .big { font-size: clamp(32px, 4vw, 46px); line-height: 1; overflow-wrap: anywhere; }
+.spec .h2 { font-size: 20px; line-height: 1.15; }
+.spec .body { font-size: 14.5px; color: var(--muted); }
+.spec .glyphs { font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+.fam { font-family: var(--font-mono); font-size: 12px; color: var(--muted); display: flex; gap: 4px 14px; flex-wrap: wrap; }
+
+/* Storefront preview */
+.preview { border-radius: 20px; overflow: hidden; border: 1px solid var(--line); background: var(--pv-paper); color: var(--pv-ink); font-family: var(--pv-body); }
+.pv-strip { background: var(--pv-ink); color: var(--pv-paper); font-size: 12px; font-weight: 500; letter-spacing: .14em; padding: 8px 0; overflow: hidden; white-space: nowrap; }
+.pv-strip .track { display: inline-flex; gap: 36px; padding-left: 36px; animation: marquee 30s linear infinite; }
+.pv-strip .track span::after { content: "✦"; margin-left: 36px; color: var(--pv-pop); }
+@keyframes marquee { to { transform: translateX(-50%); } }
+.pv-nav { display: flex; align-items: center; gap: 22px; padding: 14px 26px; flex-wrap: wrap; border-bottom: 1px solid color-mix(in srgb, var(--pv-ink) 12%, transparent); }
+.pv-nav .logo svg { height: 40px; width: auto; display: block; }
+.pv-nav nav { display: flex; gap: 20px; font-size: 13px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; flex-wrap: wrap; }
+.pv-nav .tools { margin-left: auto; display: flex; gap: 12px; font-size: 13px; align-items: center; }
+.pv-nav .bag { background: var(--pv-ink); color: var(--pv-paper); border-radius: 999px; padding: 5px 12px; font-weight: 700; }
+.pv-hero { display: grid; grid-template-columns: 1.15fr 1fr; gap: 28px; padding: 44px 34px; align-items: center; }
+@media (max-width: 760px) { .pv-hero { grid-template-columns: 1fr; padding: 24px 18px; } }
+.pv-hero .kicker { font-size: 12px; letter-spacing: .24em; text-transform: uppercase; font-weight: 500; color: var(--pv-lead-text); }
+.pv-hero h3 { font-family: var(--pv-display); font-weight: var(--pv-display-w); font-variation-settings: var(--pv-fvs); font-size: clamp(42px, 6.4vw, 80px); line-height: .96; margin: 14px 0 16px; letter-spacing: -.01em; }
+.pv-hero h3 em { font-style: italic; color: var(--pv-lead-text); }
+.pv-hero p { font-size: 16px; max-width: 42ch; opacity: .82; }
+.pv-ctas { display: flex; gap: 10px; margin-top: 24px; flex-wrap: wrap; }
+.pv-btn { border-radius: 999px; padding: 12px 22px; font-weight: 700; font-size: 14px; border: 1.5px solid var(--pv-ink); color: var(--pv-ink); }
+.pv-btn.solid { background: var(--pv-primary); border-color: var(--pv-primary); color: var(--pv-on-primary); }
+.pv-art { position: relative; aspect-ratio: 5 / 4; max-width: 100%; border-radius: 28px; background: var(--pv-secondary); display: grid; place-items: center; overflow: hidden; }
+.pv-art::before { content: ""; position: absolute; width: 74%; aspect-ratio: 1; border-radius: 50%; border: 2px solid var(--pv-pop); right: -16%; top: -22%; }
+.pv-art::after { content: ""; position: absolute; width: 40%; aspect-ratio: 1; border-radius: 50%; background: var(--pv-primary); left: -8%; bottom: -14%; opacity: .9; }
+.pv-art svg { position: relative; z-index: 1; width: 40%; height: auto; }
+.pv-products { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; padding: 0 34px 34px; }
+@media (max-width: 760px) { .pv-products { grid-template-columns: 1fr; padding: 0 18px 22px; } }
+.pv-card { display: grid; gap: 8px; }
+.pv-card .img { aspect-ratio: 4 / 3; border-radius: 16px; display: grid; place-items: center; position: relative; max-width: 100%; }
+.pv-card .img svg { width: 52%; height: auto; }
+.pv-card .badge { position: absolute; top: 10px; left: 10px; background: var(--pv-ink); color: var(--pv-paper); font-size: 10.5px; font-weight: 700; letter-spacing: .08em; padding: 3px 8px; border-radius: 999px; text-transform: uppercase; }
+.pv-card .name { font-family: var(--pv-display); font-weight: var(--pv-display-w); font-variation-settings: var(--pv-fvs); font-size: 19px; line-height: 1.15; }
+.pv-card .row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.pv-card .price { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.pv-card .add { font-size: 12px; font-weight: 700; border-radius: 999px; padding: 5px 12px; background: var(--pv-ink); color: var(--pv-paper); }
+.pv-label { font-size: 12px; color: var(--muted); }
+
+.summary { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; display: grid; gap: 12px; }
+.summary pre { margin: 0; font-family: var(--font-mono); font-size: 12.5px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; background: var(--bg); border-radius: 10px; padding: 14px; }
+.summary .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.summary .status { font-size: 13px; color: var(--muted); }
+footer { padding-block: 32px 48px; color: var(--muted); font-size: 13px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } .pv-strip .track { animation: none; } }
+</style>
+
+<div class="picks-bar" role="region" aria-label="Your picks">
+  <div class="wrap">
+    <div class="brand"><span id="bar-logo" aria-hidden="true"></span><span>Your picks</span></div>
+    <div class="chips" id="chips"></div>
+    <button class="primary" id="copy-top" type="button">Copy picks</button>
+  </div>
+</div>
+
+<header class="intro">
+  <div class="wrap">
+    <span class="eyebrow">Jazz94 · Brand identity · Colour and type</span>
+    <h1>Colour and fonts for the Maison Monogram</h1>
+    <p class="lede">The logo is locked. Now choose one palette and one font pairing. The brand board below redraws the monogram, a hang tag, a buy button and a headline in your choices, so you can judge the whole identity at once.</p>
+    <ol class="steps" aria-label="Project steps">
+      <li class="done">Logo: Maison Monogram</li>
+      <li class="now">Brand colours</li>
+      <li class="now">Fonts</li>
+      <li>L1 homepage wireframe</li>
+    </ol>
+  </div>
+</header>
+
+<section class="block" aria-labelledby="h-board">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Live</span>
+      <h2 id="h-board">Brand board</h2>
+    </div>
+    <div class="board" id="board"></div>
+  </div>
+</section>
+
+<section class="block" aria-labelledby="h-colour">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Step 2</span>
+      <h2 id="h-colour">Colour palettes</h2>
+      <p>Eight palettes picked to suit a fashion-house monogram. Each has a lead colour for buy buttons, a second colour for big blocks and the monogram tile, a pop colour for small accents, and an ink and paper pair for text and backgrounds. 4.5:1 passes WCAG AA for normal text.</p>
+    </div>
+    <div class="grid4" id="palettes" role="radiogroup" aria-label="Colour palette"></div>
+  </div>
+</section>
+
+<section class="block" aria-labelledby="h-type">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Step 3</span>
+      <h2 id="h-type">Font pairings</h2>
+      <p>The display face draws the J, the 94 and big headlines. The body face sets the spaced JAZZ94 wordmark, menus, product details and checkout. Prices use JetBrains Mono in every option. All fonts are free on Google Fonts.</p>
+    </div>
+    <div class="grid2" id="fonts" role="radiogroup" aria-label="Font pairing"></div>
+  </div>
+</section>
+
+<section class="block" aria-labelledby="h-preview">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Check it together</span>
+      <h2 id="h-preview">Your picks on a storefront</h2>
+      <p>A quick styled mock to test the identity. The real homepage layout comes in the L1 wireframe.</p>
+    </div>
+    <div class="preview" id="preview"></div>
+    <p class="pv-label">Product names and prices are sample content.</p>
+  </div>
+</section>
+
+<section class="block" aria-labelledby="h-sum">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="h-sum">Send your picks back</h2>
+      <p>Copy this and paste it into the chat. I'll lock the brand and move on to the L1 wireframe.</p>
+    </div>
+    <div class="summary">
+      <pre id="summary-text"></pre>
+      <div class="row">
+        <button class="primary" id="copy-bottom" type="button">Copy picks</button>
+        <span class="status" id="copy-status" role="status"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap">Jazz94 brand identity · colour and type round · logo locked to Maison Monogram</div></footer>
+
+<script>
+(function () {
+  const NS = "http://www.w3.org/2000/svg";
+
+  const PALETTES = [
+    { id: "bordeaux", name: "Bordeaux Champagne", rec: true, mood: "Wine-bar luxury with a rose-pink wink. The most premium fit for the monogram.",
+      c: { primary: ["Bordeaux", "#9E1F45"], secondary: ["Champagne", "#E9D3A6"], pop: ["Rose", "#FF7A9C"], ink: ["Cellar", "#1C0B12"], paper: ["Blush White", "#FFFBFA"] } },
+    { id: "emerald", name: "Emerald Satin", isNew: true, mood: "Jewel green and satin gold, like a watch box lining.",
+      c: { primary: ["Emerald", "#08875D"], secondary: ["Satin Gold", "#D8B26E"], pop: ["Coral Pink", "#FF7F8A"], ink: ["Deep Jade", "#06221A"], paper: ["Mint Silk", "#F6FAF8"] } },
+    { id: "cobalt", name: "Cobalt Couture", isNew: true, mood: "Runway cobalt with butter yellow and a coral flash.",
+      c: { primary: ["Cobalt", "#1F3BDB"], secondary: ["Butter", "#F5E6A8"], pop: ["Coral", "#FF6F59"], ink: ["Navy Noir", "#0B1033"], paper: ["Porcelain", "#F8F9FD"] } },
+    { id: "sunset", name: "Midnight Sunset", mood: "Deep indigo nights lit by coral and gold.",
+      c: { primary: ["Sunset Coral", "#FF5F45"], secondary: ["Midnight Indigo", "#1F2163"], pop: ["Gold Leaf", "#F2C14E"], ink: ["Night", "#0E0F24"], paper: ["Moonlight", "#F6F5FB"] } },
+    { id: "velvet", name: "Velvet Club", mood: "A late-night jazz room in plum, brass and neon.",
+      c: { primary: ["Neon Magenta", "#E0307A"], secondary: ["Velvet Plum", "#3D1450"], pop: ["Brass", "#D9A441"], ink: ["Backstage", "#170A1F"], paper: ["Lilac Haze", "#FAF6FC"] } },
+    { id: "racing", name: "Racing Green", mood: "Classic racing green with a tangerine kick.",
+      c: { primary: ["Tangerine", "#FF6B1A"], secondary: ["Racing Green", "#0F4D3A"], pop: ["Lilac", "#C7B3FF"], ink: ["Forest Night", "#0A1D16"], paper: ["Mint Frost", "#F3F8F5"] } },
+    { id: "mocha", name: "Mocha Peach", isNew: true, mood: "Espresso brown, peach and sky blue. Warm, soft and grown-up.",
+      c: { primary: ["Peach Punch", "#FF7A50"], secondary: ["Espresso", "#3A2420"], pop: ["Sky", "#8FC9FF"], ink: ["Roast", "#1B110E"], paper: ["Oat Milk", "#FBF8F5"] } },
+    { id: "tokyo", name: "Tokyo Pop", mood: "The fun pick: hot pink, electric violet and cyan.",
+      c: { primary: ["Hot Pink", "#FF2E88"], secondary: ["Electric Violet", "#5B2BE0"], pop: ["Cyan", "#2EE6D6"], ink: ["Arcade Night", "#12082A"], paper: ["Pearl", "#FAF7FF"] } }
+  ];
+
+  const FONTS = [
+    { id: "editorial", name: "Editorial Luxe", rec: true, mood: "High-contrast serif from fashion magazine covers, with a clean geometric sans.",
+      display: { family: "DM Serif Display", weight: 400, fvs: "normal", stack: "'DM Serif Display', Georgia, serif" },
+      body: { family: "DM Sans", stack: "'DM Sans', system-ui, sans-serif" } },
+    { id: "couture", name: "Couture Didone", isNew: true, mood: "Razor-sharp Bodoni with airy Josefin caps. Pure luxury-house energy.",
+      display: { family: "Bodoni Moda", weight: 700, fvs: "normal", stack: "'Bodoni Moda', 'Didot', Georgia, serif" },
+      body: { family: "Josefin Sans", stack: "'Josefin Sans', system-ui, sans-serif" } },
+    { id: "velvet", name: "Velvet Serif", mood: "A soft, slightly wonky heavy serif. Luxury with a smile.",
+      display: { family: "Fraunces", weight: 800, fvs: "'SOFT' 100, 'WONK' 1", stack: "'Fraunces', Georgia, serif" },
+      body: { family: "Plus Jakarta Sans", stack: "'Plus Jakarta Sans', system-ui, sans-serif" } },
+    { id: "quirk", name: "Quirky Serif", isNew: true, mood: "Gloock's chunky, characterful serif with friendly Albert Sans.",
+      display: { family: "Gloock", weight: 400, fvs: "normal", stack: "'Gloock', Georgia, serif" },
+      body: { family: "Albert Sans", stack: "'Albert Sans', system-ui, sans-serif" } },
+    { id: "deco", name: "Deco Night", mood: "Art-deco lettering from 1920s jazz-club marquees.",
+      display: { family: "Limelight", weight: 400, fvs: "normal", stack: "'Limelight', Georgia, serif" },
+      body: { family: "Jost", stack: "'Jost', system-ui, sans-serif" } },
+    { id: "gallery", name: "Gallery Wide", mood: "Wide, quirky and arty, like a design-store shopping bag.",
+      display: { family: "Syne", weight: 800, fvs: "normal", stack: "'Syne', 'Arial Black', system-ui, sans-serif" },
+      body: { family: "Urbanist", stack: "'Urbanist', system-ui, sans-serif" } },
+    { id: "sport", name: "Sport Luxe", isNew: true, mood: "Extra-wide Archivo, like the bezel of a premium sports watch.",
+      display: { family: "Archivo", weight: 800, fvs: "'wdth' 125", stack: "'Archivo', 'Arial Black', system-ui, sans-serif" },
+      body: { family: "Archivo", stack: "'Archivo', system-ui, sans-serif" } },
+    { id: "groove", name: "Retro Groove", mood: "The fun pick: chunky '90s mixtape curves.",
+      display: { family: "Shrikhand", weight: 400, fvs: "normal", stack: "'Shrikhand', 'Cooper Black', Georgia, serif" },
+      body: { family: "Outfit", stack: "'Outfit', system-ui, sans-serif" } }
+  ];
+
+  const KEY = "jazz94-colour-type-v1";
+  let picks = { palette: "bordeaux", font: "editorial" };
+  try {
+    const saved = JSON.parse(localStorage.getItem(KEY) || "null");
+    if (saved && PALETTES.some(x => x.id === saved.palette) && FONTS.some(x => x.id === saved.font)) picks = saved;
+  } catch (e) {}
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(picks)); } catch (e) {} };
+  const byId = (arr, id) => arr.find(x => x.id === id) || arr[0];
+
+  function lum(hex) {
+    const n = parseInt(hex.slice(1), 16);
+    const ch = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map(v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
+    return 0.2126 * ch[0] + 0.7152 * ch[1] + 0.0722 * ch[2];
+  }
+  function ratio(a, b) { const l1 = lum(a), l2 = lum(b); return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05); }
+  function bestOn(bg, pal) { const ink = pal.c.ink[1], paper = pal.c.paper[1]; return ratio(bg, ink) >= ratio(bg, paper) ? ink : paper; }
+
+  const dAttr = f => `font-family="${f.display.stack}" font-weight="${f.display.weight}" style="font-variation-settings:${f.display.fvs}"`;
+  const bAttr = (f, w) => `font-family="${f.body.stack}" font-weight="${w}"`;
+
+  /* Maison Monogram. tileKey picks which brand colour fills the tile. */
+  function monoMarkup(pal, font, bg, tileKey) {
+    const c = pal.c;
+    const fg = bestOn(bg, pal);
+    let tile = c[tileKey || "secondary"][1];
+    if (ratio(tile, bg) < 1.5) tile = tileKey === "primary" ? c.secondary[1] : c.primary[1];
+    if (ratio(tile, bg) < 1.5) tile = fg;
+    const on = bestOn(tile, pal);
+    const supCandidates = [c.primary[1], c.pop[1]];
+    let sup = on, best = 0;
+    supCandidates.forEach(col => { const r = ratio(col, tile); if (r > best && r >= 2) { best = r; sup = col; } });
+    const ring = ratio(c.pop[1], tile) >= 1.6 ? c.pop[1] : on;
+    return `<rect x="-50" y="-50" width="100" height="100" rx="26" fill="${tile}" stroke="${fg}" stroke-opacity="${ratio(tile, bg) < 2 ? 1 : 0}" stroke-width="2"/>
+      <rect x="-43" y="-43" width="86" height="86" rx="20" fill="none" stroke="${ring}" stroke-opacity=".7" stroke-width="1.2"/>
+      <text x="-11" y="5" ${dAttr(font)} font-size="70" fill="${on}" text-anchor="middle" dominant-baseline="central">J</text>
+      <text x="27" y="-22" ${dAttr(font)} font-size="21" fill="${sup}" text-anchor="middle" dominant-baseline="central">94</text>`;
+  }
+
+  function drawMono(container, pal, font, bg, iconOnly, tileKey) {
+    container.innerHTML = "";
+    const svg = document.createElementNS(NS, "svg");
+    svg.setAttribute("role", "img");
+    svg.setAttribute("aria-label", iconOnly ? "Jazz94 monogram" : "Jazz94 logo");
+    svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+    container.appendChild(svg);
+    const root = document.createElementNS(NS, "g");
+    svg.appendChild(root);
+    const fg = bestOn(bg, pal);
+    root.innerHTML = iconOnly ? monoMarkup(pal, font, bg, tileKey) :
+      `<g>${monoMarkup(pal, font, bg, tileKey)}</g>
+       <text x="74" y="2" ${bAttr(font, 500)} font-size="40" fill="${fg}" letter-spacing="9">JAZZ94</text>
+       <text x="76" y="26" ${bAttr(font, 500)} font-size="10" fill="${fg}" fill-opacity=".65" letter-spacing="4.5">SHADES · WATCHES · KICKS</text>`;
+    const b = root.getBBox();
+    const pad = iconOnly ? 2 : 5;
+    if (b.width) svg.setAttribute("viewBox", [b.x - pad, b.y - pad, b.width + pad * 2, b.height + pad * 2].map(n => n.toFixed(1)).join(" "));
+  }
+
+  function prodIcon(kind, ink, fill) {
+    if (kind === "sun") return `<svg viewBox="0 0 70 34" aria-hidden="true"><path d="M30 12 Q35 6 40 12" fill="none" stroke="${ink}" stroke-width="3"/><circle cx="17" cy="17" r="14" fill="${fill}" stroke="${ink}" stroke-width="3"/><circle cx="53" cy="17" r="14" fill="${fill}" stroke="${ink}" stroke-width="3"/></svg>`;
+    if (kind === "watch") return `<svg viewBox="0 0 70 48" aria-hidden="true"><rect x="25" y="1" width="20" height="46" rx="5" fill="${ink}"/><circle cx="35" cy="24" r="16" fill="${fill}" stroke="${ink}" stroke-width="3"/><path d="M35 24 L35 14 M35 24 L42 28" stroke="${ink}" stroke-width="3" stroke-linecap="round"/></svg>`;
+    return `<svg viewBox="0 0 70 40" aria-hidden="true"><path d="M4 30 L6 12 Q8 6 14 8 L26 14 Q30 16 34 14 L40 10 Q44 8 46 12 L52 22 Q66 24 66 32 L66 34 H4 Z" fill="${fill}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/><path d="M28 18 L32 24 M34 16 L38 22" stroke="${ink}" stroke-width="2.5" stroke-linecap="round"/></svg>`;
+  }
+
+  /* ---------- brand board ---------- */
+  function renderBoard() {
+    const pal = byId(PALETTES, picks.palette), font = byId(FONTS, picks.font), c = pal.c;
+    const ds = `font-family:${font.display.stack};font-weight:${font.display.weight};font-variation-settings:${font.display.fvs}`;
+    const leadText = ratio(c.primary[1], c.paper[1]) >= 3 ? c.primary[1] : c.ink[1];
+    const board = document.getElementById("board");
+    board.innerHTML = `
+      <div class="b-main" id="bd-main" style="background:${c.paper[1]}"></div>
+      <div class="b-side">
+        <div class="b-tile" id="bd-ink" style="background:${c.ink[1]}"></div>
+        <div class="b-tile" id="bd-lead" style="background:${c.primary[1]}"></div>
+        <div class="b-tag" style="background:${c.secondary[1]};color:${bestOn(c.secondary[1], pal)}">
+          <div class="ic" id="bd-tag"></div>
+          <div><div class="pn" style="font-family:${font.body.stack}">Bebop Round Sunglasses</div><div class="pr">₹1,899</div></div>
+        </div>
+        <div class="b-btn" style="background:${c.paper[1]};box-shadow:inset 0 0 0 1px var(--line);font-family:${font.body.stack}">
+          <span style="background:${c.primary[1]};color:${bestOn(c.primary[1], pal)}">Add to bag</span>
+          <span style="box-shadow:inset 0 0 0 1.5px ${c.ink[1]};color:${c.ink[1]}">Try in AR</span>
+          <span style="background:${c.pop[1]};color:${bestOn(c.pop[1], pal)};font-size:11.5px;letter-spacing:.1em">NEW DROP</span>
+        </div>
+      </div>
+      <div class="b-strip">${["primary", "secondary", "pop", "ink", "paper"].map(k => `<div style="background:${c[k][1]};color:${bestOn(c[k][1], pal)}"><span>${c[k][0]}</span><span class="hex">${c[k][1]}</span></div>`).join("")}</div>
+      <div class="b-type" style="background:${c.paper[1]};color:${c.ink[1]}">
+        <div class="hl" style="${ds}">Wear the <span style="color:${leadText}">groove.</span></div>
+        <div class="cp" style="font-family:${font.body.stack}">
+          <span class="k">Shades · Watches · Kicks</span>
+          <p>Round frames in hand-polished acetate, steel watches with sapphire glass, and sneakers built to dance in. Free delivery over ₹999.</p>
+        </div>
+      </div>`;
+    drawMono(document.getElementById("bd-main"), pal, font, c.paper[1], false);
+    drawMono(document.getElementById("bd-ink"), pal, font, c.ink[1], true);
+    drawMono(document.getElementById("bd-lead"), pal, font, c.primary[1], true, "secondary");
+    drawMono(document.getElementById("bd-tag"), pal, font, c.secondary[1], true, "primary");
+  }
+
+  /* ---------- option cards ---------- */
+  function optShell(group, item, idx) {
+    const checked = picks[group] === item.id;
+    const lab = document.createElement("label");
+    lab.className = "opt" + (checked ? " is-selected" : "");
+    const input = document.createElement("input");
+    input.type = "radio"; input.name = group; input.id = `${group}-${item.id}`; input.value = item.id; input.checked = checked;
+    input.addEventListener("change", () => { picks[group] = item.id; save(); renderAll(); });
+    lab.appendChild(input);
+    lab.insertAdjacentHTML("beforeend", `<div class="opt-top"><h3><span class="num">${idx + 1} · </span>${item.name}</h3><span class="tags">${item.isNew ? '<span class="tag new">New</span>' : ""}${item.rec ? '<span class="tag rec">Recommended</span>' : ""}<span class="tag sel">Selected</span></span></div>`);
+    return lab;
+  }
+
+  function renderPalettes() {
+    const font = byId(FONTS, picks.font);
+    const el = document.getElementById("palettes");
+    el.innerHTML = "";
+    PALETTES.forEach((P, i) => {
+      const card = optShell("palette", P, i), c = P.c;
+      const sw = ["primary", "secondary", "pop", "ink", "paper"].map(k =>
+        `<div class="sw s-${k}" style="background:${c[k][1]};color:${bestOn(c[k][1], P)}"><span>${c[k][0]}</span><span class="hex">${c[k][1]}</span></div>`).join("");
+      const checks = [
+        ["Buy button text", ratio(c.primary[1], bestOn(c.primary[1], P))],
+        ["Body text", ratio(c.ink[1], c.paper[1])],
+        ["Text on second", ratio(c.secondary[1], bestOn(c.secondary[1], P))]
+      ].map(([lab, v]) => {
+        const cls = v >= 4.5 ? "pass" : "warn", t = v >= 4.5 ? "AA" : (v >= 3 ? "large" : "low");
+        return `<div><span class="r">${lab}</span><span class="ratio ${cls}">${v.toFixed(1)}:1 ${t}</span></div>`;
+      }).join("");
+      card.insertAdjacentHTML("beforeend", `
+        <p class="idea">${P.mood}</p>
+        <div class="p-icons">
+          <div class="i1" style="background:${c.paper[1]};box-shadow:inset 0 0 0 1px var(--line)"></div>
+          <div class="i2" style="background:${c.ink[1]}"></div>
+          <div class="i3" style="background:${c.primary[1]}"></div>
+        </div>
+        <div class="swatches">${sw}</div>
+        <div class="checks">${checks}</div>`);
+      el.appendChild(card);
+      drawMono(card.querySelector(".i1"), P, font, c.paper[1], true);
+      drawMono(card.querySelector(".i2"), P, font, c.ink[1], true);
+      drawMono(card.querySelector(".i3"), P, font, c.primary[1], true, "secondary");
+    });
+  }
+
+  function renderFonts() {
+    const pal = byId(PALETTES, picks.palette), c = pal.c;
+    const leadText = ratio(c.primary[1], "#FFFFFF") >= 3 ? c.primary[1] : c.ink[1];
+    const el = document.getElementById("fonts");
+    el.innerHTML = "";
+    FONTS.forEach((F, i) => {
+      const card = optShell("font", F, i);
+      const ds = `font-family:${F.display.stack};font-weight:${F.display.weight};font-variation-settings:${F.display.fvs}`;
+      card.insertAdjacentHTML("beforeend", `
+        <p class="idea">${F.mood}</p>
+        <div class="f-lock" style="background:${c.paper[1]}"></div>
+        <div class="spec">
+          <div class="big" style="${ds}">Wear the <span style="color:${leadText}">groove.</span></div>
+          <div class="h2" style="${ds}">Shades, watches & kicks</div>
+          <div class="body" style="font-family:${F.body.stack}">Midnight Set Watch in brushed steel with sapphire glass. Free delivery over ₹999 and easy 15-day returns.</div>
+          <div class="glyphs" style="font-family:${F.body.stack}">Aa Bb Gg Jj Rr 0123456789 ₹ & ?!</div>
+        </div>
+        <div class="fam"><span>Display · ${F.display.family}</span><span>Body · ${F.body.family}</span></div>`);
+      el.appendChild(card);
+      drawMono(card.querySelector(".f-lock"), pal, F, c.paper[1], false);
+    });
+  }
+
+  function renderPreview() {
+    const pal = byId(PALETTES, picks.palette), font = byId(FONTS, picks.font), c = pal.c;
+    const pv = document.getElementById("preview");
+    const leadText = ratio(c.primary[1], c.paper[1]) >= 3 ? c.primary[1] : c.ink[1];
+    const vars = {
+      "--pv-primary": c.primary[1], "--pv-secondary": c.secondary[1], "--pv-pop": c.pop[1], "--pv-ink": c.ink[1], "--pv-paper": c.paper[1],
+      "--pv-lead-text": leadText, "--pv-on-primary": bestOn(c.primary[1], pal),
+      "--pv-display": font.display.stack, "--pv-display-w": font.display.weight, "--pv-fvs": font.display.fvs, "--pv-body": font.body.stack
+    };
+    pv.setAttribute("style", Object.entries(vars).map(([k, v]) => `${k}:${v}`).join(";"));
+    const msgs = ["FREE DELIVERY OVER ₹999", "15-DAY EASY RETURNS", "NEW DROPS EVERY FRIDAY", "GIFT WRAPPING ON EVERY ORDER"];
+    const products = [
+      { n: "Bebop Round Sunglasses", p: "₹1,899", bg: c.secondary[1], icon: "sun", badge: "New drop" },
+      { n: "Midnight Set Watch", p: "₹3,499", bg: c.pop[1], icon: "watch", badge: "Bestseller" },
+      { n: "Scat Hi-Top Sneakers", p: "₹2,799", bg: c.primary[1], icon: "shoe", badge: "Limited" }
+    ];
+    pv.innerHTML = `
+      <div class="pv-strip" aria-label="Offers"><div class="track">${msgs.concat(msgs).map(m => `<span>${m}</span>`).join("")}</div></div>
+      <div class="pv-nav">
+        <span class="logo" id="pv-logo"></span>
+        <nav aria-label="Sample shop menu"><span>Sunglasses</span><span>Watches</span><span>Shoes</span><span>New in</span></nav>
+        <span class="tools"><span>Search</span><span>Account</span><span class="bag">Bag · 2</span></span>
+      </div>
+      <div class="pv-hero">
+        <div>
+          <span class="kicker">The Summer '94 Edit</span>
+          <h3>Wear the <em>groove.</em></h3>
+          <p>Statement shades, steel watches and sneakers made to move. New pieces drop every Friday.</p>
+          <div class="pv-ctas"><span class="pv-btn solid">Shop the edit</span><span class="pv-btn">Explore watches</span></div>
+        </div>
+        <div class="pv-art" id="pv-art"></div>
+      </div>
+      <div class="pv-products">
+        ${products.map(p => `<div class="pv-card">
+          <div class="img" style="background:${p.bg}"><span class="badge">${p.badge}</span>${prodIcon(p.icon, c.ink[1], c.paper[1])}</div>
+          <div class="name">${p.n}</div>
+          <div class="row"><span class="price">${p.p}</span><span class="add">Add to bag</span></div>
+        </div>`).join("")}
+      </div>`;
+    drawMono(document.getElementById("pv-logo"), pal, font, c.paper[1], false);
+    drawMono(document.getElementById("pv-art"), pal, font, c.secondary[1], true, "primary");
+  }
+
+  function summaryText() {
+    const P = byId(PALETTES, picks.palette), F = byId(FONTS, picks.font), c = P.c;
+    return [
+      "Jazz94 brand picks",
+      "Logo: Maison Monogram (locked)",
+      `Palette: ${P.name}`,
+      `  Lead ${c.primary[0]} ${c.primary[1]}`,
+      `  Second ${c.secondary[0]} ${c.secondary[1]}`,
+      `  Pop ${c.pop[0]} ${c.pop[1]}`,
+      `  Ink ${c.ink[0]} ${c.ink[1]}`,
+      `  Paper ${c.paper[0]} ${c.paper[1]}`,
+      `Fonts: ${F.name}, display ${F.display.family}, body ${F.body.family}, numbers JetBrains Mono`
+    ].join("\n");
+  }
+
+  function renderBar() {
+    const P = byId(PALETTES, picks.palette), F = byId(FONTS, picks.font);
+    document.getElementById("chips").innerHTML = `<span class="chip"><b>Logo</b>Maison Monogram</span><span class="chip"><b>Colour</b>${P.name}</span><span class="chip"><b>Fonts</b>${F.name}</span>`;
+    drawMono(document.getElementById("bar-logo"), P, F, P.c.paper[1], true);
+    document.getElementById("summary-text").textContent = summaryText();
+  }
+
+  function renderAll() { renderBoard(); renderPalettes(); renderFonts(); renderPreview(); renderBar(); }
+
+  async function copyPicks() {
+    const status = document.getElementById("copy-status");
+    try {
+      await navigator.clipboard.writeText(summaryText());
+      status.textContent = "Copied. Paste it into the chat.";
+    } catch (e) {
+      const pre = document.getElementById("summary-text");
+      const range = document.createRange(); range.selectNodeContents(pre);
+      const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+      status.textContent = "Text selected. Press Ctrl+C or ⌘C to copy.";
+      pre.scrollIntoView({ block: "center" });
+    }
+  }
+  document.getElementById("copy-top").addEventListener("click", copyPicks);
+  document.getElementById("copy-bottom").addEventListener("click", copyPicks);
+
+  renderAll();
+  const loads = FONTS.flatMap(F => [
+    document.fonts.load(`${F.display.weight} 40px "${F.display.family}"`),
+    document.fonts.load(`500 16px "${F.body.family}"`)
+  ]);
+  Promise.all(loads).catch(() => {}).then(() => document.fonts.ready).then(renderAll);
+})();
+</script>
+
+</body>
+</html>

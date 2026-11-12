@@ -1,0 +1,61 @@
+/* Jazz94 design tokens — Bordeaux Champagne · Editorial Luxe
+   Drop into any stack (Shopify theme, Next.js, plain CSS). Values match the prototype exactly. */
+
+:root {
+  /* Brand colours */
+  --j94-bordeaux: #9E1F45;        /* Lead: buy buttons, links, sale, active states */
+  --j94-champagne: #E9D3A6;       /* Second: monogram tile, big blocks, accents on dark */
+  --j94-champagne-light: #F6EDDC; /* Soft panels: lookbook, delivery bar, value cards */
+  --j94-rose: #FF7A9C;            /* Pop: small accents on dark only (dots, band stars, "Sale" on images) */
+  --j94-cellar: #1C0B12;          /* Ink: text, footer, dark bands */
+  --j94-blush: #FFFBFA;           /* Paper: page background */
+
+  /* Supporting neutrals */
+  --j94-text-2: #4A3A41;          /* Secondary body text on light */
+  --j94-muted: #6B5560;           /* Labels, meta, captions (passes AA on blush) */
+  --j94-line: rgba(28, 11, 18, .12);
+  --j94-tile: #F3E9E2;            /* Image placeholder background */
+  --j94-cellar-2: #2A141D;        /* Countdown boxes on cellar */
+  --j94-on-dark-2: #E8DCDF;       /* Secondary text on cellar */
+  --j94-success: #0E6B44;         /* Confirmations, "free delivery unlocked" */
+
+  /* Image overlay for full-bleed heroes (text on the left) */
+  --j94-hero-overlay:
+    linear-gradient(180deg, rgba(28,11,18,.7) 0%, rgba(28,11,18,0) 24%),
+    linear-gradient(90deg, rgba(28,11,18,.9) 0%, rgba(28,11,18,.7) 34%, rgba(28,11,18,.18) 62%, rgba(28,11,18,0) 78%),
+    linear-gradient(0deg, rgba(28,11,18,.55) 0%, rgba(28,11,18,0) 30%);
+
+  /* Typography */
+  --j94-font-display: "DM Serif Display", Georgia, serif;   /* headlines, product names, J monogram */
+  --j94-font-body: "DM Sans", system-ui, sans-serif;        /* body, menus, buttons, wordmark */
+  --j94-font-mono: "JetBrains Mono", ui-monospace, monospace; /* prices, counts, order numbers */
+
+  --j94-hero-size: clamp(72px, 9.4cqi, 146px);   /* "Wear the groove." — mobile 68px */
+  --j94-hero-md: clamp(60px, 7cqi, 112px);       /* page heroes — mobile 58px */
+  --j94-title-sm: clamp(52px, 6cqi, 92px);       /* "Your bag." */
+  --j94-h2: clamp(34px, 4cqi, 56px);             /* section headings */
+  --j94-body: 16px;                              /* line-height 1.55 */
+  --j94-lead: 19px;                              /* hero paragraph (16px mobile) */
+  --j94-kicker: 13px;                            /* uppercase, letter-spacing .24em, weight 500–700 */
+  --j94-nav: 13px;                               /* uppercase, letter-spacing .14em */
+
+  /* Layout */
+  --j94-container: 1320px;
+  --j94-gutter: 20px;
+  --j94-section-gap: 96px;                       /* 64px on mobile */
+  --j94-breakpoint: 760px;                       /* mobile layout below this width */
+
+  /* Radius */
+  --j94-r-pill: 999px;                           /* buttons, chips, badges */
+  --j94-r-card: 22px;                            /* product cards, inputs groups */
+  --j94-r-tile: 28px;                            /* category tiles, value cards */
+  --j94-r-panel: 36px;                           /* lookbook, banners, countdown */
+  --j94-r-arch: 999px 999px 32px 32px;           /* arch photo frames */
+  --j94-r-input: 12px;
+
+  /* Motion */
+  --j94-ease: cubic-bezier(.2, .7, .2, 1);
+  --j94-dur-fast: .25s;                          /* button lift, colour changes */
+  --j94-dur-mid: .45s;                           /* drawer, toast, pop */
+  --j94-dur-slow: .9s;                           /* headline slide-in, fade-up */
+}
